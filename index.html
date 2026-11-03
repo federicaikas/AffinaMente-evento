@@ -94,14 +94,13 @@ section{padding:18px 0}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
 .fatte{position:absolute;left:8px;top:8px;z-index:4;padding:7px 13px;border-radius:22px;background:rgba(53,23,126,.9);color:#aef9ff;font:700 15px var(--display);letter-spacing:.08em;text-transform:uppercase}
-.card .ok{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;margin-top:12px;padding:8px 0 0;border:0;border-top:1px solid rgba(45,27,120,.16);background:none;color:var(--viola);font:600 17px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;text-align:left;cursor:pointer;transition:transform .12s}
-.card .ok:active{transform:scale(.98)}
-.card .ok .cb{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--viola);background:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
-.card .ok .cb svg{width:16px;height:16px;opacity:0;transition:opacity .2s}
-.card .ok .lb{opacity:.7}
+.card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(45,27,120,.16)}
+.card .ok{flex:none;width:48px;height:48px;margin:-4px 0 -4px -8px;padding:0;border:0;background:none;color:var(--viola);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s}
+.card .ok:active{transform:scale(.9)}
+.card .ok .cb{width:36px;height:36px;border-radius:50%;border:2px solid var(--viola);background:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.card .ok .cb svg{width:20px;height:20px;opacity:.35;transition:opacity .2s}
 .card.fatta .ok .cb{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
 .card.fatta .ok .cb svg{opacity:1}
-.card.fatta .ok .lb{opacity:1;font-weight:700}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
 #mappa-svg polygon.fatta{fill:#aef9ff}
 .pin.fatta circle{fill:#aef9ff}
@@ -130,11 +129,11 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px calc((min(100vw,760px) - var(--cw))/2) 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
-.card{font-family:var(--display);flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 34px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
+.card{font-family:var(--display);flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 10px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
 .card.att{opacity:1;transform:none;box-shadow:0 0 0 3px #fff,0 10px 28px rgba(20,10,70,.35)}
 .card .top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
-.card .nav{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);display:flex;gap:14px;z-index:3}
-.card .nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--giallo);box-shadow:0 4px 12px rgba(20,10,70,.3);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
+.card .nav{display:flex;gap:8px;margin-right:-4px}
+.card .nav button{width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
 .card .nav button:active:not(:disabled){transform:scale(.9)}
 .card .nav button:disabled{opacity:.3;cursor:default}
 .card .nav svg{width:20px;height:20px}
@@ -143,13 +142,13 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .card .vino{display:grid;grid-template-columns:20px 1fr;column-gap:10px;align-items:stretch;margin:0}
 .card .ic{position:relative}
 .card .ic svg{position:absolute;inset:0;width:100%;height:100%}
-.card .vino b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola-chiaro)}
-.card .vino i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);margin-top:1px}
-.card .abb{margin:10px 0 2px;font-weight:400;font-size:14px;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:var(--viola);opacity:.6}
+.card .vino b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
+.card .vino i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola);margin-top:1px}
+.card .abb{margin:10px 0 2px;font-weight:400;font-size:14px;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:var(--viola);opacity:1}
 .card .piatto{margin:0;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
 .card p{margin:0;font-size:16px;line-height:1.35}
 .card.start h3{color:var(--viola)}
-.card .ph{color:var(--viola-chiaro)}
+.card .ph{color:var(--viola);opacity:1}
 .ph{font-style:normal;border-bottom:1px dashed currentColor;opacity:.85}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
 .legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
@@ -494,8 +493,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
-    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div/p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="lb">Segna come assaggiata</span></button></article>';}
+    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0"><div class="top"><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p><div class="foot"><span></span>'+nav+'</div></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
@@ -509,7 +508,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     TAPPE.forEach(function(t){
       var f=!!fatte[t.n];if(f)n++;
       var c=cards[ORDINE.indexOf(t.n)];c.classList.toggle('fatta',f);
-      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.querySelector('.lb').textContent=f?'Assaggiata':'Segna come assaggiata';
+      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.setAttribute('aria-label',f?'Tappa assaggiata, tocca per togliere la spunta':'Segna come assaggiata');
       if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);var tx=pins[t.n].querySelector('text');if(tx)tx.textContent=f?'\u2713':'';}
       if(edif[t.n])edif[t.n].classList.toggle('fatta',f);
     });
