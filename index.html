@@ -105,21 +105,21 @@ section{padding:18px 0}
 .zoom button:active{transform:scale(.9)}
 .conta:empty{display:none}
 .conta{position:absolute;left:8px;top:8px;z-index:4;padding:7px 12px;border-radius:22px;background:rgba(53,23,126,.88);color:var(--giallo);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase}
-.carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 7% 10px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 7% 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
 .card{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
 .card.att{opacity:1;transform:none;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
-.card .top{display:flex;align-items:center;gap:10px;min-height:44px;margin-bottom:6px}
-.card .bd{flex:none;width:38px;height:38px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
+.card .top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.card .bd{flex:none;width:42px;height:42px;font-weight:700!important;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
 .card.start .bd{background:var(--viola);color:var(--giallo)}
-.card .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#c42447}
-.card .nav{margin-left:auto;display:flex;gap:8px}
-.card .nav button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(45,27,120,.2);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
+.card .nav{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);display:flex;gap:14px;z-index:3}
+.card .nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--giallo);box-shadow:0 4px 12px rgba(20,10,70,.3);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
 .card .nav button:active:not(:disabled){transform:scale(.9)}
 .card .nav button:disabled{opacity:.3;cursor:default}
 .card .nav svg{width:20px;height:20px}
-.card h3{font-size:27px;margin:0 0 10px;line-height:1.03}
+.card h3{font-size:27px;margin:0;line-height:1.03;flex:1;min-width:0}
+.card.start .top{margin-bottom:6px}
 .card dl{margin:0;display:grid;grid-template-columns:86px 1fr;gap:8px 12px;font-size:16px;line-height:1.3;align-items:start}
 .card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c42447;padding-top:2px}
 .card dd{margin:0}
@@ -139,8 +139,9 @@ section{padding:18px 0}
 .passi b{flex:none;width:40px;height:40px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:25px;position:relative;z-index:1}
 .passi h3{font-size:24px;line-height:1.05;color:var(--giallo);margin-bottom:1px}
 .passi p{margin:0;font-size:16px;line-height:1.2}
-.pg{position:absolute;right:10px;top:-44px;width:78px;height:auto;z-index:2}
-.passi li:first-child>div{padding-right:84px}
+.pg{position:absolute;right:8px;top:-62px;width:100px;height:auto;z-index:2}
+.passi li:first-child>div{padding-right:100px}
+.passi li:nth-child(2)>div{padding-right:40px}
 
 /* Aiuto + footer */
 .aiuto .glass{padding:20px 18px}
@@ -151,7 +152,8 @@ footer .firma{font-family:var(--display);font-weight:700;font-size:26px;letter-s
 footer p{margin:0 0 .35em}
 footer a{color:var(--giallo);font-weight:700;text-decoration:none;white-space:nowrap}
 footer .cta{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.15;letter-spacing:.05em;text-transform:uppercase;margin:0 0 22px}
-footer .cta a{font-size:28px}
+footer .cta a{font-size:24px;white-space:normal}
+footer .contatti{margin-top:12px;font-size:15px}
 footer .piccolo{max-width:36ch;margin-left:auto;margin-right:auto;font-size:12.5px;opacity:.78;margin-top:14px}
 
 @media (min-width:768px){
@@ -355,10 +357,9 @@ footer .piccolo{max-width:36ch;margin-left:auto;margin-right:auto;font-size:12.5
 
 <footer>
   <div class="wrap">
-    <p class="cta">Scatta la tua foto e taggaci su Instagram<br><a href="https://www.instagram.com/prolocodarfo/" target="_blank" rel="noopener">@prolocodarfo</a></p>
-    <div class="firma">Proloco di Darfo</div>
-    <p><a href="tel:+393661947273">+39 366 194 7273</a><br><a href="mailto:prolocodarfoboarioterme@gmail.com">prolocodarfoboarioterme@gmail.com</a></p>
+    <p class="cta">Scatta la tua foto e taggaci su Instagram<br><a href="https://www.instagram.com/prolocodarfo/" target="_blank" rel="noopener">Proloco Darfo Boario Terme</a></p>
     <p class="piccolo">AFFINAMENTE è un evento organizzato dalla Proloco di Darfo in collaborazione con l'Associazione dei Commercianti della Cittadella e con il patrocinio del Comune di Darfo Boario Terme.</p>
+    <p class="contatti"><a href="tel:+393661947273">+39 366 194 7273</a><br><a href="mailto:prolocodarfoboarioterme@gmail.com">prolocodarfoboarioterme@gmail.com</a></p>
   </div>
 </footer>
 
@@ -439,7 +440,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),mapEl=document.getElementById('mapscroll'),car=document.getElementById('carosello'),conta=document.getElementById('conta');
   var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){pins[p.id==='pin-start'?'start':p.dataset.n]=p;});
   var ORDINE=['start'];TAPPE.forEach(function(t){ORDINE.push(t.n);});
-  var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=1260,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
+  var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=2500,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
 
   function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function ph(t){return /\[.*\]/.test(t)?'<span class="ph">'+esc(t)+'</span>':esc(t);}
@@ -450,8 +451,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
-    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0"><div class="top"><span class="bd" aria-hidden="true">\u2605</span><span class="n">Partenza</span>'+nav+'</div><h3>'+esc(START.nome)+'</h3><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><span class="bd" aria-hidden="true">'+t.n+'</span><span class="n">Tappa '+t.n+' di '+TAPPE.length+'</span>'+nav+'</div><h3>'+esc(t.nome)+'</h3><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
+    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><span class="bd" aria-hidden="true">\u2605</span><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><span class="bd" aria-label="Tappa '+t.n+'">'+t.n+'</span><h3>'+esc(t.nome)+'</h3></div><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
