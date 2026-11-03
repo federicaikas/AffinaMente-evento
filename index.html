@@ -176,6 +176,13 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 @keyframes cade{0%{transform:translate3d(0,-20px,0) rotate(0);opacity:1}100%{transform:translate3d(var(--dx),105vh,0) rotate(var(--rot));opacity:1}}
 
 
+
+/* Invito a scorrere */
+.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:8px;padding:0 20px 0 22px;height:48px;border-radius:99px;border:2px solid #fff;background:var(--giallo);color:var(--viola);font:700 17px var(--display);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
+.scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.scendi svg{width:20px;height:20px;animation:rimbalza 1.4s ease-in-out infinite}
+@keyframes rimbalza{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
+@media (prefers-reduced-motion:reduce){.scendi svg{animation:none}.scendi{transition:none}}
 /* Aiuto + footer */
 .aiuto .glass{padding:20px 18px}
 .aiuto h2{margin-bottom:10px}
@@ -381,6 +388,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 
 </main>
 
+<button type="button" class="scendi" id="scendi" aria-label="Scorri fino alla mappa">Scopri la mappa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
 <div class="festa" id="festa" role="dialog" aria-modal="true" aria-labelledby="festa-t" hidden>
   <div class="coriandoli" id="coriandoli" aria-hidden="true"></div>
   <div class="festa-in glass glass-light">
@@ -743,6 +751,25 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   // Vetro che brilla dove tocchi
   function shine(e){var g=e.target.closest&&e.target.closest('.glass');if(!g)return;var r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');g.classList.add('shine');clearTimeout(g._s);g._s=setTimeout(function(){g.classList.remove('shine');},700);}
   if(!reduced){document.addEventListener('pointerdown',shine,{passive:true});document.addEventListener('pointermove',function(e){if(e.pressure>0||e.pointerType==='mouse')shine(e);},{passive:true});}
+})();
+(function(){
+  var b=document.getElementById('scendi'),m=document.getElementById('mappa');if(!b||!m)return;
+  var chiuso=false;
+  function aggiorna(){
+    var r=m.getBoundingClientRect(),vh=window.innerHeight;
+    // visibile finché la mappa non è ben dentro lo schermo
+    var lontana=r.top>vh*0.62&&window.scrollY<m.offsetTop-40;
+    b.classList.toggle('on',lontana&&!chiuso);
+  }
+  b.addEventListener('click',function(){
+    chiuso=true;b.classList.remove('on');
+    var y=m.getBoundingClientRect().top+window.scrollY-6;
+    window.scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+  });
+  window.addEventListener('scroll',function(){if(window.scrollY>m.offsetTop-vhPx()*0.5)chiuso=true;aggiorna()},{passive:true});
+  function vhPx(){return window.innerHeight}
+  window.addEventListener('resize',aggiorna);
+  setTimeout(aggiorna,600);
 })();
 if(matchMedia('(prefers-reduced-motion:reduce)').matches){const v=document.querySelector('.hero-video');if(v){v.removeAttribute('autoplay');v.pause()}}
 </script>
