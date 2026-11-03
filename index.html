@@ -109,16 +109,16 @@ section{padding:18px 0}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
 .card{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
-.card.att{opacity:1;transform:none;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
+.card.att{opacity:1;transform:none;box-shadow:0 0 0 3px #fff,0 10px 28px rgba(20,10,70,.35)}
 .card .top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.card .bd{flex:none;width:42px;height:42px;font-weight:700!important;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
+.card .bd{flex:none;width:42px;height:42px;font-weight:700!important;-webkit-text-stroke:.7px currentColor;font-size:24px!important;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
 .card.start .bd{background:var(--viola);color:var(--giallo)}
 .card .nav{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);display:flex;gap:14px;z-index:3}
 .card .nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--giallo);box-shadow:0 4px 12px rgba(20,10,70,.3);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
 .card .nav button:active:not(:disabled){transform:scale(.9)}
 .card .nav button:disabled{opacity:.3;cursor:default}
 .card .nav svg{width:20px;height:20px}
-.card h3{font-size:27px;margin:0;line-height:1.03;flex:1;min-width:0}
+.card h3{font-size:21px;margin:0;line-height:.98;flex:1;min-width:0}
 .card.start .top{margin-bottom:6px}
 .card dl{margin:0;display:grid;grid-template-columns:86px 1fr;gap:8px 12px;font-size:16px;line-height:1.3;align-items:start}
 .card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c42447;padding-top:2px}
