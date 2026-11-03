@@ -95,12 +95,13 @@ section{padding:18px 0}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
 .fatte{position:absolute;left:8px;top:8px;z-index:4;padding:7px 13px;border-radius:22px;background:rgba(53,23,126,.9);color:#aef9ff;font:700 15px var(--display);letter-spacing:.08em;text-transform:uppercase}
-.card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(45,27,120,.16)}
-.card .ok{flex:none;width:48px;height:48px;margin:-4px 0 -4px -8px;padding:0;border:0;background:none;color:var(--viola);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s}
+.card .foot{position:absolute;left:14px;right:14px;bottom:-24px;z-index:3;display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;pointer-events:none}
+.card .foot>*{pointer-events:auto}
+.card .ok{flex:none;width:48px;height:48px;margin:0;padding:0;border:0;background:none;color:var(--viola);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s}
 .card .ok:active{transform:scale(.9)}
-.card .ok .cb{width:36px;height:36px;border-radius:50%;border:2px solid var(--viola);background:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.card .ok .cb{width:46px;height:46px;box-shadow:0 4px 12px rgba(20,10,70,.3);border-radius:50%;border:2px solid var(--viola);background:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .card .ok .cb svg{width:20px;height:20px;opacity:.35;transition:opacity .2s}
-.card.fatta .ok .cb{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.card.fatta .ok .cb{background:var(--viola);color:#aef9ff;border-color:#fff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
 .card.fatta .ok .cb svg{opacity:1}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
 #mappa-svg polygon.fatta{fill:#aef9ff}
@@ -130,11 +131,11 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px calc((min(100vw,760px) - var(--cw))/2) 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
-.card{font-family:var(--display);flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 10px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
+.card{font-family:var(--display);flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 34px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
 .card.att{opacity:1;transform:none;box-shadow:0 0 0 3px #fff,0 10px 28px rgba(20,10,70,.35)}
 .card .top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
-.card .nav{display:flex;gap:8px;margin-right:-4px}
-.card .nav button{width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
+.card .nav{display:flex;gap:10px}
+.card .nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--viola);box-shadow:0 4px 12px rgba(20,10,70,.3);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
 .card .nav button:active:not(:disabled){transform:scale(.9)}
 .card .nav button:disabled{opacity:.3;cursor:default}
 .card .nav svg{width:20px;height:20px}
