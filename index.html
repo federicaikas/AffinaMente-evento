@@ -124,7 +124,7 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px calc((min(100vw,760px) - var(--cw))/2) 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
-.card{flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
+.card{flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 34px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
 .card.att{opacity:1;transform:none;box-shadow:0 0 0 3px #fff,0 10px 28px rgba(20,10,70,.35)}
 .card .top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .card .bd{flex:none;width:42px;height:42px;font-weight:700!important;-webkit-text-stroke:.7px currentColor;font-size:24px!important;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
@@ -136,9 +136,10 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .card .nav svg{width:20px;height:20px}
 .card h3{font-size:21px;margin:0;line-height:.98;flex:1;min-width:0}
 .card.start .top{margin-bottom:6px}
-.card dl{margin:0;display:grid;grid-template-columns:86px 1fr;gap:8px 12px;font-size:16px;line-height:1.3;align-items:start}
-.card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c42447;padding-top:2px}
-.card dd{margin:0}
+.card .vino{display:flex;align-items:center;gap:8px;margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:23px;line-height:1.05;letter-spacing:.03em;text-transform:uppercase;color:var(--viola-chiaro)}
+.card .vino svg{flex:none;width:20px;height:26px}
+.card .abb{margin:8px 0 2px;font-family:'DM Serif Display',serif;font-style:italic;font-size:16px;line-height:1.1;color:var(--viola);opacity:.7}
+.card .piatto{margin:0;font-size:16px;line-height:1.25;color:var(--viola)}
 .card p{margin:0;font-size:16px;line-height:1.35}
 .card.start h3{color:var(--viola)}
 .card .ph{color:var(--viola-chiaro)}
@@ -387,67 +388,67 @@ var TAPPE=[
   "n": 1,
   "nome": "Room 30",
   "stuz": "Salume nostrano [nome da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Franciacorta"
  },
  {
   "n": 2,
   "nome": "Odo Serramenti",
   "stuz": "Formaggio nostrano [nome da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Rosé"
  },
  {
   "n": 3,
   "nome": "Pescheria La Conchiglia",
   "stuz": "Crudité di tonno rosso del Mediterraneo e melograno",
-  "vino": "[Nome del vino]"
+  "vino": "Lamontina"
  },
  {
   "n": 4,
   "nome": "Caffè Italia",
   "stuz": "Schiacciatina con mousse di baccalà aromatizzato alla menta e scaglie di mandorle",
-  "vino": "[Nome del vino]"
+  "vino": "Franciacorta"
  },
  {
   "n": 5,
   "nome": "Pianta Calzature",
   "stuz": "Monoporzione di riso Venere con gambero Viola di Sicilia",
-  "vino": "[Nome del vino]"
+  "vino": "Rosé"
  },
  {
   "n": 6,
   "nome": "Mariella Boutique",
   "stuz": "Crostone con farina di polenta e ragù di piovra 2.0",
-  "vino": "[Nome del vino]"
+  "vino": "Lamontina"
  },
  {
   "n": 7,
   "nome": "Ci Si Vede Ottica",
   "stuz": "Salume nostrano [nome da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Franciacorta"
  },
  {
   "n": 8,
   "nome": "Taccolini Wine Zero",
   "stuz": "Lobster roll",
-  "vino": "[Nome del vino]"
+  "vino": "Rosé"
  },
  {
   "n": 9,
   "nome": "Officina Spatti",
   "stuz": "Formaggio nostrano [nome da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Lamontina"
  },
  {
   "n": 10,
   "nome": "Gerry Sport",
   "stuz": "Panettone [gusto da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Franciacorta"
  },
  {
   "n": 11,
   "nome": "Nonchalance Moda",
   "stuz": "[stuzzichino da definire]",
-  "vino": "[Nome del vino]"
+  "vino": "Rosé"
  }
 ];
 var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 ritiri il kit: sacchetta portacalice, calice in vetro (resta tuo come ricordo) e tessera coupon.'};
@@ -469,7 +470,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
     if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><span class="bd" aria-hidden="true">\u2605</span><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><span class="bd" aria-label="Tappa '+t.n+'">'+t.n+'</span><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><span class="bd" aria-label="Tappa '+t.n+'">'+t.n+'</span><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><p class="vino"><svg viewBox="0 0 20 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2h12c.6 6-1.4 10.5-6 11.5C5.400 12.500 3.400 8 4 2Z"/><path d="M10 13.500V23M6 23h8"/></svg>'+esc(t.vino)+'</p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
