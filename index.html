@@ -94,11 +94,14 @@ section{padding:18px 0}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
 .fatte{position:absolute;left:8px;top:8px;z-index:4;padding:7px 13px;border-radius:22px;background:rgba(53,23,126,.9);color:#aef9ff;font:700 15px var(--display);letter-spacing:.08em;text-transform:uppercase}
-.card .top .ok{flex:none;margin:-7px -4px -7px 0;width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;transition:transform .12s,background .2s,color .2s}
-.card .top .ok svg{width:22px;height:22px;opacity:.45;transition:opacity .2s}
-.card .top .ok:active{transform:scale(.9)}
-.card.fatta .top .ok{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
-.card.fatta .top .ok svg{opacity:1}
+.card .ok{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;margin-top:12px;padding:8px 0 0;border:0;border-top:1px solid rgba(45,27,120,.16);background:none;color:var(--viola);font:600 17px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;text-align:left;cursor:pointer;transition:transform .12s}
+.card .ok:active{transform:scale(.98)}
+.card .ok .cb{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--viola);background:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.card .ok .cb svg{width:16px;height:16px;opacity:0;transition:opacity .2s}
+.card .ok .lb{opacity:.7}
+.card.fatta .ok .cb{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.card.fatta .ok .cb svg{opacity:1}
+.card.fatta .ok .lb{opacity:1;font-weight:700}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
 #mappa-svg polygon.fatta{fill:#aef9ff}
 .pin.fatta circle{fill:#aef9ff}
@@ -393,14 +396,14 @@ var TAPPE=[
  {
   "n": 1,
   "nome": "Room 30",
-  "stuz": "Salume nostrano [nome da definire]",
+  "stuz": "Salume nostrano",
   "vino": "Fiano di Avellino",
   "cantina": "Berlucchi"
  },
  {
   "n": 2,
   "nome": "Odo Serramenti",
-  "stuz": "Formaggio nostrano [nome da definire]",
+  "stuz": "Formaggio nostrano",
   "vino": "Fiano di Avellino",
   "cantina": "Berlucchi"
  },
@@ -435,7 +438,7 @@ var TAPPE=[
  {
   "n": 7,
   "nome": "Ci Si Vede Ottica",
-  "stuz": "Salume nostrano [nome da definire]",
+  "stuz": "Salume nostrano",
   "vino": "Fiano di Avellino",
   "cantina": "Berlucchi"
  },
@@ -449,7 +452,7 @@ var TAPPE=[
  {
   "n": 9,
   "nome": "Officina Spatti",
-  "stuz": "Formaggio nostrano [nome da definire]",
+  "stuz": "Formaggio nostrano",
   "vino": "Fiano di Avellino",
   "cantina": "Berlucchi"
  },
@@ -492,7 +495,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
     if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div/p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div/p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="lb">Segna come assaggiata</span></button></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
@@ -506,7 +509,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     TAPPE.forEach(function(t){
       var f=!!fatte[t.n];if(f)n++;
       var c=cards[ORDINE.indexOf(t.n)];c.classList.toggle('fatta',f);
-      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));
+      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.querySelector('.lb').textContent=f?'Assaggiata':'Segna come assaggiata';
       if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);var tx=pins[t.n].querySelector('text');if(tx)tx.textContent=f?'\u2713':'';}
       if(edif[t.n])edif[t.n].classList.toggle('fatta',f);
     });
