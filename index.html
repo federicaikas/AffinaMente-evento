@@ -79,12 +79,14 @@ section{padding:18px 0}
 .mapbox{position:relative;height:clamp(210px,34svh,320px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.5)}
 .mapscroll{background:var(--menta);line-height:0;height:100%;touch-action:none;cursor:grab}
 #mappa-svg{display:block;width:100%;height:100%}
+#mappa-svg polygon{transition:fill .35s ease}
+#mappa-svg polygon.acceso{fill:#f6da3b;stroke:#fff;stroke-width:9;filter:drop-shadow(0 0 22px rgba(246,218,59,1))}
 .pin{cursor:pointer;outline:none}
 .pin-in{transform:scale(1.9);transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
 .pin.start .pin-in{transform:scale(2.05)}
 .pin:hover .pin-in{transform:scale(2.1)}
-.pin.sel .pin-in{transform:scale(2.35);animation:salto .5s cubic-bezier(.3,1.6,.5,1)}
-@keyframes salto{0%{transform:scale(1.9)}40%{transform:scale(2.85)}100%{transform:scale(2.35)}}
+.pin.sel .pin-in{transform:scale(1.75);animation:salto .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes salto{0%{transform:scale(1.9)}40%{transform:scale(2.85)}100%{transform:scale(1.75)}}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
 .pin.sel circle{fill:#35177e}
@@ -98,13 +100,12 @@ section{padding:18px 0}
 .link{background:none;border:0;padding:6px 0;color:var(--viola-chiaro);font:700 15px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px}
 
 /* App: mappa fissa in alto, card che scorrono sotto */
-.mappa{padding-top:8px}
+.funziona{padding-bottom:0}
+.mappa{padding-top:18px}
 .app{position:relative;display:flex;flex-direction:column;gap:12px}
 .zoom{position:absolute;right:8px;bottom:8px;z-index:4;display:flex;flex-direction:column;gap:6px}
 .zoom button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.92);color:var(--viola);font:700 28px/1 var(--display);padding:0 0 3px;cursor:pointer;box-shadow:0 4px 14px rgba(20,10,70,.3);transition:transform .12s}
 .zoom button:active{transform:scale(.9)}
-.conta:empty{display:none}
-.conta{position:absolute;left:8px;top:8px;z-index:4;padding:7px 12px;border-radius:22px;background:rgba(53,23,126,.88);color:var(--giallo);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase}
 .carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px calc((min(100vw,760px) - var(--cw))/2) 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
@@ -189,7 +190,6 @@ footer .piccolo{max-width:36ch;margin-left:auto;margin-right:auto;font-size:12.5
   <div class="wrap">
     <div class="app">
       <div class="mapbox">
-        <div class="conta" id="conta" aria-live="polite"></div>
         <div class="zoom" role="group" aria-label="Zoom mappa"><button type="button" id="zin" aria-label="Ingrandisci">+</button><button type="button" id="zout" aria-label="Riduci">−</button></div>
         <div class="mapscroll" id="mapscroll">
 <svg xmlns="http://www.w3.org/2000/svg" id="mappa-svg" viewBox="640 120 1260 1800" role="group" aria-label="Mappa del percorso con le 11 tappe">
@@ -437,7 +437,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 
 (function(){
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),mapEl=document.getElementById('mapscroll'),car=document.getElementById('carosello'),conta=document.getElementById('conta');
+  var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),mapEl=document.getElementById('mapscroll'),car=document.getElementById('carosello');
   var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){pins[p.id==='pin-start'?'start':p.dataset.n]=p;});
   var ORDINE=['start'];TAPPE.forEach(function(t){ORDINE.push(t.n);});
   var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=2500,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
@@ -481,6 +481,19 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     ORDINE.forEach(function(k){var p=pins[k],m=svg.getScreenCTM().inverse(),r=p.getBoundingClientRect(),pt=svg.createSVGPoint();pt.x=r.left+r.width/2;pt.y=r.top+r.height/2;var c=pt.matrixTransform(m);centri[k]={x:c.x,y:c.y};});
     svg.setAttribute('viewBox',keep);
   }
+  // Edificio più vicino a ogni pin (si accende con la card attiva)
+  var edif={};
+  function distSeg(px,py,ax,ay,bx,by){var dx=bx-ax,dy=by-ay,t=dx||dy?((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy):0;t=Math.max(0,Math.min(1,t));var x=ax+t*dx-px,y=ay+t*dy-py;return Math.sqrt(x*x+y*y);}
+  function dentro(px,py,P){var c=false;for(var i=0,j=P.length-1;i<P.length;j=i++){if(((P[i][1]>py)!==(P[j][1]>py))&&(px<(P[j][0]-P[i][0])*(py-P[i][1])/(P[j][1]-P[i][1])+P[i][0]))c=!c;}return c;}
+  function trovaEdifici(){
+    var polys=[].slice.call(svg.querySelectorAll('polygon[fill="#c3a8e5"]')).map(function(el){
+      return {el:el,P:el.getAttribute('points').trim().split(/\s+/).map(function(q){var a=q.split(',');return [+a[0],+a[1]];})};});
+    ORDINE.forEach(function(k){
+      if(k==='start')return;var c=centri[k],best=null,bd=1e9;
+      polys.forEach(function(o){var d=dentro(c.x,c.y,o.P)?0:1e9;if(d)for(var i=0;i<o.P.length;i++){var a=o.P[i],b=o.P[(i+1)%o.P.length];d=Math.min(d,distSeg(c.x,c.y,a[0],a[1],b[0],b[1]));}if(d<bd){bd=d;best=o.el;}});
+      if(best&&bd<150)edif[k]=best;
+    });
+  }
   function onPin(w){var c=centri[ORDINE[cur<0?0:cur]],hh=w*aspect();return [c.x-w/2,c.y-hh/2,w,hh];}
   function zoomBy(f,fx,fy){ // fx,fy in unit\u00e0 SVG (centro vista se omessi)
     var w=Math.max(WMIN,Math.min(WMAX,vb[2]/f)),hh=w*aspect();
@@ -494,7 +507,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var key=ORDINE[i];
     Object.keys(pins).forEach(function(k){pins[k].classList.toggle('sel',String(k)===String(key));});
     cards.forEach(function(c,j){c.classList.toggle('att',j===i);});
-    conta.textContent=key==='start'?'':'Tappa '+key+' / '+TAPPE.length;
+    svg.querySelectorAll('polygon.acceso').forEach(function(p){p.classList.remove('acceso');});
+    if(edif[key])edif[key].classList.add('acceso');
     flyTo(onPin(vb[2]));
     if(!opts.silenzioso)buzz();
   }
@@ -555,7 +569,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   addEventListener('resize',function(){setVB(vb);});
 
   // Avvio: molto vicino, sulla partenza
-  calcolaCentri();
+  calcolaCentri();trovaEdifici();
   svg.setAttribute('viewBox',FULL.join(' '));vb=FULL.slice();
   cur=-1;attiva(0,{silenzioso:true});setVB(onPin(W0));
   requestAnimationFrame(function(){ready=true;vaiA(0,true);});
