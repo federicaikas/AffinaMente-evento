@@ -63,11 +63,11 @@ section{padding:18px 0}
 @media (prefers-reduced-transparency:reduce){.glass{background:rgba(70,45,150,.96);-webkit-backdrop-filter:none;backdrop-filter:none}.glass-light{background:#fff}}
 
 /* Hero */
-.hero{text-align:center;padding:6px 0 14px}
-.hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 20px calc(50% - min(50vw,240px));pointer-events:none}
+.hero{text-align:center;padding:0 0 14px}
+.hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 0 calc(50% - min(50vw,240px));pointer-events:none}
 .hero .badge{margin-top:0}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
-.logo{display:block;width:min(82%,380px);height:auto;margin:24px auto 8px}
+.logo{display:block;width:min(74%,330px);height:auto;margin:12px auto 4px}
 .data{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(17px,5vw,21px);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap}
 .mappa .sub{margin:4px 0 14px;font-size:18px}
 .calice{flex:none;width:38px;height:auto;overflow:visible}
@@ -178,10 +178,10 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 
 
 /* Invito a scorrere */
-.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:8px;padding:0 20px 0 22px;height:48px;border-radius:99px;border:2px solid #fff;background:var(--giallo);color:var(--viola);font:800 18px var(--display);-webkit-text-stroke:.5px currentColor;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
+.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:6px;padding:0 15px 0 17px;height:38px;border-radius:99px;border:1.5px solid #fff;background:var(--giallo);color:var(--viola);font:800 15px var(--display);-webkit-text-stroke:.4px currentColor;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
 .scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:salta 2s 1s ease-in-out infinite}
-.scendi svg{width:20px;height:20px}
-@keyframes salta{0%,52%,100%{transform:translate(-50%,0)}12%{transform:translate(-50%,-16px)}24%{transform:translate(-50%,0)}33%{transform:translate(-50%,-8px)}41%{transform:translate(-50%,0)}}
+.scendi svg{width:16px;height:16px}
+@keyframes salta{0%,52%,100%{transform:translate(-50%,0)}12%{transform:translate(-50%,-9px)}24%{transform:translate(-50%,0)}33%{transform:translate(-50%,-4px)}41%{transform:translate(-50%,0)}}
 @media (prefers-reduced-motion:reduce){.scendi.on{animation:none}.scendi{transition:none}}
 /* Aiuto + footer */
 .aiuto .glass{padding:20px 18px}
@@ -537,7 +537,12 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="blk vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><i>'+esc(t.cantina)+'</i><b>'+esc(t.vino)+'</b></span></div><div class="blk cibo"><span class="ic">'+ICONE[t.tipo||'generico']+'</span><span><b>'+ph(t.stuz)+'</b></span></div><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
-  var cards=car.querySelectorAll('.card');
+  var cards=Array.prototype.slice.call(car.querySelectorAll('.card'));
+  // cloni ai due estremi per il giro continuo (ultima -> prima e prima -> ultima)
+  var cloneUlt=cards[cards.length-1].cloneNode(true),clonePri=cards[0].cloneNode(true);
+  [cloneUlt,clonePri].forEach(function(c){c.classList.add('clone');c.setAttribute('aria-hidden','true');c.removeAttribute('role');Array.prototype.forEach.call(c.querySelectorAll('button'),function(b){b.tabIndex=-1;});});
+  car.insertBefore(cloneUlt,cards[0]);car.appendChild(clonePri);
+  var tutte=Array.prototype.slice.call(car.querySelectorAll('.card'));
 
   // ----- Tappe assaggiate (salvate sul telefono, nessun database) -----
   var KEY='affinamente-2026-assaggiate',fatte={},azz=document.getElementById('azzera-box');
@@ -547,8 +552,9 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var n=0;
     TAPPE.forEach(function(t){
       var f=!!fatte[t.n];if(f)n++;
-      var c=cards[ORDINE.indexOf(t.n)];c.classList.toggle('fatta',f);
-      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.setAttribute('aria-label',f?'Tappa assaggiata, tocca per togliere la spunta':'Segna come assaggiata');
+      var idx=ORDINE.indexOf(t.n);
+      tutte.forEach(function(c){if(+c.dataset.i!==idx)return;c.classList.toggle('fatta',f);
+        var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.setAttribute('aria-label',f?'Tappa assaggiata, tocca per togliere la spunta':'Segna come assaggiata');});
       if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);}
       if(edif[t.n])edif[t.n].classList.toggle('fatta',f);
     });
@@ -644,7 +650,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     opts=opts||{};if(i===cur)return;cur=i;
     var key=ORDINE[i];
     Object.keys(pins).forEach(function(k){pins[k].classList.toggle('sel',String(k)===String(key));});
-    cards.forEach(function(c,j){c.classList.toggle('att',j===i);});
+    tutte.forEach(function(c){c.classList.toggle('att',+c.dataset.i===i);});
     svg.querySelectorAll('polygon.acceso').forEach(function(p){p.classList.remove('acceso');});
     if(edif[key])edif[key].classList.add('acceso');
     flyTo(onPin(vb[2]),opts.dur);
@@ -652,9 +658,9 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   }
   var auto=0;
   function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
-  function vaiA(i,instant){
-    i=Math.max(0,Math.min(ORDINE.length-1,i));var c=cards[i];
-    var to=c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,from=car.scrollLeft,dist=Math.abs(i-(cur<0?0:cur));
+  function vaiA(i,instant,via){
+    i=Math.max(0,Math.min(ORDINE.length-1,i));var c=via==='avanti'?clonePri:via==='indietro'?cloneUlt:cards[i];
+    var to=c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,from=car.scrollLeft,dist=via?1:Math.abs(i-(cur<0?0:cur));
     cancelAnimationFrame(auto);
     if(reduced||instant){car.style.scrollBehavior='auto';car.scrollLeft=to;attiva(i,{silenzioso:true});return;}
     var D=Math.min(1300,450+110*Math.max(0,dist-1));
@@ -663,15 +669,26 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var t0=performance.now();
     auto=requestAnimationFrame(function f(now){
       var k=Math.min(1,(now-t0)/D);car.scrollLeft=from+(to-from)*ease(k);
-      if(k<1)auto=requestAnimationFrame(f);else{auto=0;car.style.scrollSnapType='';car.style.scrollBehavior='';}
+      if(k<1)auto=requestAnimationFrame(f);else{auto=0;if(via)teletrasporta();car.style.scrollSnapType='';car.style.scrollBehavior='';}
     });
   }
-  var tick=0;
+  function teletrasporta(){
+    var mid=car.scrollLeft+car.clientWidth/2,c=null;
+    if(Math.abs(cloneUlt.offsetLeft+cloneUlt.offsetWidth/2-mid)<cloneUlt.offsetWidth/2)c=cards[cards.length-1];
+    else if(Math.abs(clonePri.offsetLeft+clonePri.offsetWidth/2-mid)<clonePri.offsetWidth/2)c=cards[0];
+    if(!c)return;
+    var sn=car.style.scrollSnapType,sb=car.style.scrollBehavior;
+    car.style.scrollSnapType='none';car.style.scrollBehavior='auto';
+    car.scrollLeft=c.offsetLeft-(car.clientWidth-c.offsetWidth)/2;
+    requestAnimationFrame(function(){car.style.scrollSnapType=sn;car.style.scrollBehavior=sb;});
+  }
+  var tick=0,fermo=0;
   car.addEventListener('scroll',function(){
+    clearTimeout(fermo);fermo=setTimeout(function(){if(!auto)teletrasporta();},160);
     if(tick||auto)return;
     tick=requestAnimationFrame(function(){tick=0;
       var mid=car.scrollLeft+car.clientWidth/2,best=0,d=1e9;
-      cards.forEach(function(c,j){var dd=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(dd<d){d=dd;best=j;}});
+      tutte.forEach(function(c){var dd=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(dd<d){d=dd;best=+c.dataset.i;}});
       attiva(best);
     });
   },{passive:true});
@@ -681,8 +698,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var ok=e.target.closest('.ok');
     if(ok){var n=ok.dataset.ok,prima=Object.keys(fatte).length;if(fatte[n])delete fatte[n];else fatte[n]=1;salva();buzz();applica();
       if(prima<TAPPE.length&&Object.keys(fatte).length===TAPPE.length)setTimeout(festa,350);return;}
-    var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();var L=ORDINE.length;vaiA((cur+(+b.dataset.d)+L)%L);}return;}
-    var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
+    var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();var L=ORDINE.length,r=cur+(+b.dataset.d);if(r>=L)vaiA(0,false,'avanti');else if(r<0)vaiA(L-1,false,'indietro');else vaiA(r);}return;}
+    var c=e.target.closest('.card');if(c&&c.classList.contains('clone')){vaiA(+c.dataset.i,false,c===clonePri?'avanti':'indietro');}else if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
   });
   Object.keys(pins).forEach(function(k){
     var p=pins[k];
@@ -759,7 +776,11 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var r=m.getBoundingClientRect(),vh=window.innerHeight;
     // visibile finché la mappa non è ben dentro lo schermo
     var lontana=r.top>vh*0.62&&window.scrollY<m.offsetTop-40;
-    b.classList.toggle('on',lontana&&!chiuso);
+    // niente sovrapposizione col logo: se il pulsante cadrebbe sopra logo/data, resta nascosto
+    var lg=document.querySelector('.data');
+    var top=vh-(parseFloat(getComputedStyle(b).bottom)||12)-b.offsetHeight-10;
+    var libero=!lg||top>=lg.getBoundingClientRect().bottom-4||window.scrollY>40;
+    b.classList.toggle('on',lontana&&!chiuso&&libero);
   }
   b.addEventListener('click',function(){
     chiuso=true;b.classList.remove('on');
