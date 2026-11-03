@@ -86,6 +86,7 @@ section{padding:18px 0}
 #mappa-svg polygon{transition:fill .35s ease}
 #mappa-svg polygon.acceso{fill:#f6da3b;stroke:#fff;stroke-width:9;filter:drop-shadow(0 0 22px rgba(246,218,59,1))}
 .pin{cursor:pointer;outline:none}
+.pin.start{pointer-events:none;cursor:default}
 .pin-in{transform:scale(1.9);transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
 .pin.start .pin-in{transform:scale(2.05)}
 .pin:hover .pin-in{transform:scale(2.1)}
@@ -475,13 +476,13 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 (function(){
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),mapEl=document.getElementById('mapscroll'),car=document.getElementById('carosello');
-  var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){pins[p.id==='pin-start'?'start':p.dataset.n]=p;});
+  var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){if(p.id==='pin-start')return;pins[p.dataset.n]=p;});
   // Pin senza numeri: l'ordine è libero. La spunta appare solo quando la tappa è fatta.
   Object.keys(pins).forEach(function(k){
     if(k==='start')return;var p=pins[k],tx=p.querySelector('text');
     if(tx)tx.textContent='';p.setAttribute('aria-label',p.dataset.nome);
   });
-  var ORDINE=['start'];TAPPE.forEach(function(t){ORDINE.push(t.n);});
+  var ORDINE=[];TAPPE.forEach(function(t){ORDINE.push(t.n);});
   var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=2500,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
 
   function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
@@ -493,8 +494,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
-    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0"><div class="top"><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p><div class="foot"><span></span>'+nav+'</div></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
+    {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
@@ -543,6 +543,16 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();});
   // Punti di riferimento (Comune, Cinema): crescono quando si fa zoom out
   var rifs=[];
+  (function(){
+    var sp=document.getElementById('pin-start');if(!sp)return;
+    var lab=[].slice.call(svg.querySelectorAll('text')).filter(function(t){return t.textContent==='Caffè Stazione';})[0];
+    sp.removeAttribute('tabindex');sp.setAttribute('role','img');sp.setAttribute('aria-label','Caffè Stazione, punto di partenza');
+    var g=document.createElementNS(NS,'g');sp.parentNode.insertBefore(g,sp);g.appendChild(sp);
+    var gl=null;if(lab){lab.setAttribute('fill','#e5405a');gl=document.createElementNS(NS,'g');lab.parentNode.insertBefore(gl,lab);gl.appendChild(lab);}
+    var m=/translate\(([-\d.]+)[ ,]+([-\d.]+)\)/.exec(sp.getAttribute('transform'));
+    rifs.push({g:g,cx:+m[1],cy:+m[2],damp:.35});
+    if(gl)rifs.push({g:gl,cx:+m[1],cy:+m[2]});
+  })();
   svg.querySelectorAll('circle[fill="#e5405a"]').forEach(function(ci){
     var cx=+ci.getAttribute('cx'),cy=+ci.getAttribute('cy'),g=document.createElementNS(NS,'g');
     ci.parentNode.insertBefore(g,ci);g.appendChild(ci);
@@ -553,7 +563,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   });
   function scalaRif(){
     var k=Math.max(1,Math.min(2.8,vb[2]/820));
-    rifs.forEach(function(r){r.g.setAttribute('transform','translate('+r.cx+' '+r.cy+') scale('+k+') translate('+(-r.cx)+' '+(-r.cy)+')');});
+    rifs.forEach(function(r){var kk=r.damp?1+(k-1)*r.damp:k;r.g.setAttribute('transform','translate('+r.cx+' '+r.cy+') scale('+kk+') translate('+(-r.cx)+' '+(-r.cy)+')');});
   }
   function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));scalaRif();if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();}
   function flyTo(to,dur){
@@ -677,7 +687,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   // Avvio: molto vicino, sulla partenza
   calcolaCentri();trovaEdifici();applica();
   svg.setAttribute('viewBox',FULL.join(' '));vb=FULL.slice();
-  cur=-1;attiva(0,{silenzioso:true});setVB(onPin(W0));
+  cur=-1;attiva(0,{silenzioso:true});
+  (function(){var sp=rifs[0],c=centri[ORDINE[0]],w=900,hh=w*aspect();setVB([(sp.cx+c.x)/2-w/2,(sp.cy+c.y)/2-hh/2,w,hh]);})();
   requestAnimationFrame(function(){ready=true;vaiA(0,true);});
 
   // Vetro che brilla dove tocchi
