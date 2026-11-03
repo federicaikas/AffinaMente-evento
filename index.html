@@ -10,6 +10,7 @@
 <style>
 @font-face{font-family:"Chivo";font-weight:400;font-display:swap;src:url(fonts/chivo-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Chivo";font-weight:700;font-display:swap;src:url(fonts/chivo-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:400;font-display:swap;src:url(fonts/barlow-condensed-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
 @font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
 
@@ -93,7 +94,7 @@ section{padding:18px 0}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
 .fatte{position:absolute;left:8px;top:8px;z-index:4;padding:7px 13px;border-radius:22px;background:rgba(53,23,126,.9);color:#aef9ff;font:700 15px var(--display);letter-spacing:.08em;text-transform:uppercase}
-.card .top .ok{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;transition:transform .12s,background .2s,color .2s}
+.card .top .ok{flex:none;margin:-7px -4px -7px 0;width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;transition:transform .12s,background .2s,color .2s}
 .card .top .ok svg{width:22px;height:22px;opacity:.45;transition:opacity .2s}
 .card .top .ok:active{transform:scale(.9)}
 .card.fatta .top .ok{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
@@ -112,7 +113,7 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .pin:focus-visible circle{stroke:#35177e}
 
   transition:transform .35s cubic-bezier(.2,.9,.3,1.1),opacity .25s}
-.ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
+.ph{font-style:normal;border-bottom:1px dashed currentColor;opacity:.85}
 
 .link{background:none;border:0;padding:6px 0;color:var(--viola-chiaro);font:700 15px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px}
 
@@ -126,24 +127,27 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px calc((min(100vw,760px) - var(--cw))/2) 34px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
 .carosello::-webkit-scrollbar{display:none}
-.card{flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 34px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
+.card{font-family:var(--display);flex:0 0 var(--cw);scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 34px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
 .card.att{opacity:1;transform:none;box-shadow:0 0 0 3px #fff,0 10px 28px rgba(20,10,70,.35)}
-.card .top{display:flex;align-items:center;gap:12px;margin-bottom:10px;min-height:44px}
+.card .top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
 .card .nav{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);display:flex;gap:14px;z-index:3}
 .card .nav button{width:46px;height:46px;border-radius:50%;border:2px solid var(--giallo);box-shadow:0 4px 12px rgba(20,10,70,.3);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
 .card .nav button:active:not(:disabled){transform:scale(.9)}
 .card .nav button:disabled{opacity:.3;cursor:default}
 .card .nav svg{width:20px;height:20px}
-.card h3{font-size:30px;font-weight:700;-webkit-text-stroke:.5px currentColor;margin:0;line-height:1;flex:1;min-width:0;text-transform:uppercase;letter-spacing:.02em}
+.card h3{padding-top:0;font-size:30px;font-weight:700;-webkit-text-stroke:.5px currentColor;margin:0;line-height:1;flex:1;min-width:0;text-transform:uppercase;letter-spacing:.02em}
 .card.start .top{margin-bottom:6px}
-.card .vino{display:flex;align-items:flex-start;gap:8px;margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:17px;line-height:1.1;letter-spacing:.05em;text-transform:uppercase;color:var(--viola-chiaro)}
-.card .vino svg{flex:none;width:15px;height:20px;margin-top:-1px}
-.card .abb{margin:7px 0 1px;font-family:'DM Serif Display',serif;font-style:italic;font-size:15px;line-height:1.1;color:var(--viola);opacity:.7}
-.card .piatto{margin:0;font-size:15px;line-height:1.25;color:var(--viola)}
+.card .vino{display:grid;grid-template-columns:20px 1fr;column-gap:10px;align-items:stretch;margin:0}
+.card .ic{position:relative}
+.card .ic svg{position:absolute;inset:0;width:100%;height:100%}
+.card .vino b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola-chiaro)}
+.card .vino i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);margin-top:1px}
+.card .abb{margin:10px 0 2px;font-weight:400;font-size:14px;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:var(--viola);opacity:.6}
+.card .piatto{margin:0;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
 .card p{margin:0;font-size:16px;line-height:1.35}
 .card.start h3{color:var(--viola)}
 .card .ph{color:var(--viola-chiaro)}
-.ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
+.ph{font-style:normal;border-bottom:1px dashed currentColor;opacity:.85}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
 .legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
@@ -388,67 +392,78 @@ var TAPPE=[
   "n": 1,
   "nome": "Room 30",
   "stuz": "Salume nostrano [nome da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 2,
   "nome": "Odo Serramenti",
   "stuz": "Formaggio nostrano [nome da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 3,
   "nome": "Pescheria La Conchiglia",
   "stuz": "Crudité di tonno rosso del Mediterraneo e melograno",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 4,
   "nome": "Caffè Italia",
   "stuz": "Schiacciatina con mousse di baccalà aromatizzato alla menta e scaglie di mandorle",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 5,
   "nome": "Pianta Calzature",
   "stuz": "Monoporzione di riso Venere con gambero Viola di Sicilia",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 6,
   "nome": "Mariella Boutique",
   "stuz": "Crostone con farina di polenta e ragù di piovra 2.0",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 7,
   "nome": "Ci Si Vede Ottica",
   "stuz": "Salume nostrano [nome da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 8,
   "nome": "Taccolini Wine Zero",
   "stuz": "Lobster roll",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 9,
   "nome": "Officina Spatti",
   "stuz": "Formaggio nostrano [nome da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 10,
   "nome": "Gerry Sport",
   "stuz": "Panettone [gusto da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  },
  {
   "n": 11,
   "nome": "Nonchalance Moda",
   "stuz": "[stuzzichino da definire]",
-  "vino": "Franciacorta, Rosé, Lamontina"
+  "vino": "Franciacorta, Rosé, Lamontina",
+  "cantina": "Cantina da definire"
  }
 ];
 var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 ritiri il kit: sacchetta portacalice, calice in vetro (resta tuo come ricordo) e tessera coupon.'};
@@ -475,7 +490,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
     if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><p class="vino"><svg viewBox="0 0 20 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2h12c.6 6-1.4 10.5-6 11.5C5.400 12.500 3.400 8 4 2Z"/><path d="M10 13.500V23M6 23h8"/></svg>'+esc(t.vino)+'</p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div/p><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
