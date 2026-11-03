@@ -77,7 +77,7 @@ section{padding:18px 0}
 .btn,.btn:active,
 /* Mappa */
 .mapbox{position:sticky;top:8px;z-index:6;height:clamp(200px,31svh,300px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.5)}
-.mapscroll{background:var(--menta);line-height:0;height:100%;touch-action:pan-y}
+.mapscroll{background:var(--menta);line-height:0;height:100%;touch-action:none;cursor:grab}
 #mappa-svg{display:block;width:100%;height:100%}
 .pin{cursor:pointer;outline:none}
 .pin-in{transform:scale(1.9);transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
@@ -100,20 +100,32 @@ section{padding:18px 0}
 /* App: mappa fissa in alto, card che scorrono sotto */
 .mappa{padding-top:8px}
 .app{position:relative}
-.tuttamappa{position:absolute;top:8px;right:8px;z-index:4;min-height:40px;padding:0 14px;border-radius:22px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.88);color:var(--viola);font:700 16px var(--display);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.zoom{position:absolute;right:8px;bottom:8px;z-index:4;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.92);color:var(--viola);font:700 28px/1 var(--display);padding:0 0 3px;cursor:pointer;box-shadow:0 4px 14px rgba(20,10,70,.3);transition:transform .12s}
+.zoom button:active{transform:scale(.9)}
+.conta:empty{display:none}
 .conta{position:absolute;left:8px;top:8px;z-index:4;padding:7px 12px;border-radius:22px;background:rgba(53,23,126,.88);color:var(--giallo);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase}
 .carosello{display:flex;flex-direction:column;gap:10px;padding:14px 0 30px}
 .carosello::-webkit-scrollbar{display:none}
-.card{position:relative;padding:14px 16px 16px;border-radius:22px;transform:scale(.97);opacity:.8;transition:transform .3s cubic-bezier(.2,.9,.3,1.2),opacity .3s;cursor:pointer}
+.card{position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.82;transition:opacity .3s,box-shadow .3s;cursor:pointer;text-align:left}
 .card{scroll-snap-align:start;scroll-margin-top:calc(clamp(200px,31svh,300px) + 30px)}
-.card.att{transform:none;opacity:1;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
-.card .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--viola-chiaro)}
-.card h3{font-size:26px;margin:2px 0 8px;line-height:1.02}
-.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;line-height:1.3}
-.card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);padding-top:1px}
+.card.att{opacity:1;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
+.card .top{display:flex;align-items:center;gap:10px;min-height:44px;margin-bottom:6px}
+.card .bd{flex:none;width:38px;height:38px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
+.card.start .bd{background:var(--viola);color:var(--giallo)}
+.card .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:#c42447}
+.card .nav{margin-left:auto;display:flex;gap:8px}
+.card .nav button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(45,27,120,.2);background:#fff;color:var(--viola);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .12s}
+.card .nav button:active:not(:disabled){transform:scale(.9)}
+.card .nav button:disabled{opacity:.3;cursor:default}
+.card .nav svg{width:20px;height:20px}
+.card h3{font-size:27px;margin:0 0 10px;line-height:1.03}
+.card dl{margin:0;display:grid;grid-template-columns:86px 1fr;gap:8px 12px;font-size:16px;line-height:1.3;align-items:start}
+.card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c42447;padding-top:2px}
 .card dd{margin:0}
 .card p{margin:0;font-size:16px;line-height:1.35}
 .card.start h3{color:var(--viola)}
+.card .ph{color:var(--viola-chiaro)}
 .ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
 .legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
@@ -179,7 +191,7 @@ html{scroll-snap-type:y proximity}
     <div class="app">
       <div class="mapbox">
         <div class="conta" id="conta" aria-live="polite"></div>
-        <button class="tuttamappa" id="tutta" type="button" aria-pressed="false">Tutta la mappa</button>
+        <div class="zoom" role="group" aria-label="Zoom mappa"><button type="button" id="zin" aria-label="Ingrandisci">+</button><button type="button" id="zout" aria-label="Riduci">−</button></div>
         <div class="mapscroll" id="mapscroll">
 <svg xmlns="http://www.w3.org/2000/svg" id="mappa-svg" viewBox="640 120 1260 1800" role="group" aria-label="Mappa del percorso con le 11 tappe">
 <rect width="2046" height="2150" fill="#f5fff9"/>
@@ -339,11 +351,6 @@ html{scroll-snap-type:y proximity}
       </div>
       <div class="carosello" id="carosello" role="list" aria-label="Le tappe del percorso"></div>
     </div>
-    <div class="legenda" aria-hidden="true">
-      <span><i style="background:#f6da3b;border:2px solid #fff"></i>Tappe</span>
-      <span><i style="background:#35177e;border:2px solid #fff"></i>Partenza</span>
-      <span><i style="background:#e5405a"></i>Punti di riferimento</span>
-    </div>
   </div>
 </section>
 
@@ -432,71 +439,65 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 
 (function(){
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),car=document.getElementById('carosello'),conta=document.getElementById('conta'),tutta=document.getElementById('tutta');
+  var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),mapEl=document.getElementById('mapscroll'),car=document.getElementById('carosello'),conta=document.getElementById('conta');
   var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){pins[p.id==='pin-start'?'start':p.dataset.n]=p;});
   var ORDINE=['start'];TAPPE.forEach(function(t){ORDINE.push(t.n);});
-  var FULL=[640,120,1260,1800],ZOOM=1050,cur=-1,overview=false,vb=FULL.slice(),anim=0,ready=false;
+  var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=1260,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
 
   function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function ph(t){return /\[.*\]/.test(t)?'<span class="ph">'+esc(t)+'</span>':esc(t);}
   function buzz(){try{if(navigator.vibrate)navigator.vibrate(12);}catch(e){}}
 
   // ----- Card -----
+  var UP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13l6-6 6 6"/></svg>',DOWN='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l6 6 6-6"/></svg>';
   var h='';
   ORDINE.forEach(function(k,i){
-    var nav0='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>\u2039</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>\u203a</button></div>';
-    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+'<div class="n">Partenza</div><h3>'+esc(START.nome)+'</h3><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+'<div class="n">Tappa '+t.n+' di '+TAPPE.length+'</div><h3>'+esc(t.nome)+'</h3><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
+    var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
+    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0"><div class="top"><span class="bd" aria-hidden="true">\u2605</span><span class="n">Partenza</span>'+nav+'</div><h3>'+esc(START.nome)+'</h3><p>'+esc(START.testo)+'</p></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><span class="bd" aria-hidden="true">'+t.n+'</span><span class="n">Tappa '+t.n+' di '+TAPPE.length+'</span>'+nav+'</div><h3>'+esc(t.nome)+'</h3><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
 
-  // ----- Mappa: zoom animato sul pin -----
+  // ----- Mappa -----
   function aspect(){return box.clientHeight/Math.max(1,box.clientWidth);}
-  function target(){
-    if(overview)return FULL.slice();
-    var p=pins[ORDINE[cur<0?0:cur]],w=ZOOM,hh=w*aspect();
-    var m=svg.getScreenCTM().inverse(),r=p.getBoundingClientRect(),pt=svg.createSVGPoint();
-    pt.x=r.left+r.width/2;pt.y=r.top+r.height/2;
-    // coordinate del pin nel sistema del viewBox ATTUALE; le converto nel sistema del viewBox pieno
-    var c=pt.matrixTransform(m);
-    var cx=c.x,cy=c.y;
-    cx=Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,cx));
-    cy=Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,cy-hh*0.06));
+  function clampVB(v){
+    var w=Math.max(WMIN,Math.min(WMAX,v[2])),hh=w*aspect();
+    var cx=v[0]+v[2]/2,cy=v[1]+v[3]/2;
+    cx=w>=FULL[2]?FULL[0]+FULL[2]/2:Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,cx));
+    cy=hh>=FULL[3]?FULL[1]+FULL[3]/2:Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,cy));
     return [cx-w/2,cy-hh/2,w,hh];
   }
-  function setVB(v){vb=v;svg.setAttribute('viewBox',v.join(' '));}
+  function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));}
   function flyTo(to){
-    cancelAnimationFrame(anim);
+    cancelAnimationFrame(anim);to=clampVB(to);
     if(reduced||!ready){setVB(to);return;}
     var from=vb.slice(),t0=performance.now(),D=520;
     (function f(now){var k=Math.min(1,(now-t0)/D);k=1-Math.pow(1-k,3);
       setVB(from.map(function(a,i){return a+(to[i]-a)*k;}));
       if(k<1)anim=requestAnimationFrame(f);})(t0);
   }
-  // il pin non cambia posizione nello SVG: lo calcolo una volta sola a viewBox pieno
   var centri={};
   function calcolaCentri(){
-    setVB(FULL);
+    var keep=svg.getAttribute('viewBox');svg.setAttribute('viewBox',FULL.join(' '));
     ORDINE.forEach(function(k){var p=pins[k],m=svg.getScreenCTM().inverse(),r=p.getBoundingClientRect(),pt=svg.createSVGPoint();pt.x=r.left+r.width/2;pt.y=r.top+r.height/2;var c=pt.matrixTransform(m);centri[k]={x:c.x,y:c.y};});
+    svg.setAttribute('viewBox',keep);
   }
-  target=function(){
-    if(overview)return FULL.slice();
-    var c=centri[ORDINE[cur<0?0:cur]],w=ZOOM,hh=w*aspect();
-    var cx=Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,c.x));
-    var cy=Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,c.y));
-    return [cx-w/2,cy-hh/2,w,hh];
-  };
+  function onPin(w){var c=centri[ORDINE[cur<0?0:cur]],hh=w*aspect();return [c.x-w/2,c.y-hh/2,w,hh];}
+  function zoomBy(f,fx,fy){ // fx,fy in unit\u00e0 SVG (centro vista se omessi)
+    var w=Math.max(WMIN,Math.min(WMAX,vb[2]/f)),hh=w*aspect();
+    if(fx===undefined){fx=vb[0]+vb[2]/2;fy=vb[1]+vb[3]/2;}
+    var rx=(fx-vb[0])/vb[2],ry=(fy-vb[1])/vb[3];
+    return [fx-rx*w,fy-ry*hh,w,hh];
+  }
 
   function attiva(i,opts){
-    opts=opts||{};
-    if(i===cur)return;
-    cur=i;
+    opts=opts||{};if(i===cur)return;cur=i;
     var key=ORDINE[i];
     Object.keys(pins).forEach(function(k){pins[k].classList.toggle('sel',String(k)===String(key));});
     cards.forEach(function(c,j){c.classList.toggle('att',j===i);});
-    conta.textContent=key==='start'?'Partenza':'Tappa '+key+' / '+TAPPE.length;
-    if(!overview)flyTo(target());
+    conta.textContent=key==='start'?'':'Tappa '+key+' / '+TAPPE.length;
+    flyTo(onPin(vb[2]));
     if(!opts.silenzioso)buzz();
   }
   function linea(){return box.getBoundingClientRect().bottom+40;}
@@ -505,34 +506,62 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var top=cards[i].getBoundingClientRect().top+scrollY-(box.offsetHeight+8+22);
     scrollTo({top:top,behavior:reduced?'auto':'smooth'});
   }
-  // Scorrimento -> mappa: attiva la card che passa sotto la mappa
   var tick=0;
   function aggiorna(){tick=0;
     var L=linea(),best=0;
     cards.forEach(function(c,j){if(c.getBoundingClientRect().top<=L)best=j;});
     if(innerHeight+scrollY>=document.documentElement.scrollHeight-6)best=cards.length-1;
-    var r=car.getBoundingClientRect();if(r.top>L)best=0;
+    if(car.getBoundingClientRect().top>L)best=0;
     attiva(best);
   }
   addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(aggiorna);},{passive:true});
-  car.addEventListener('click',function(e){var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);});
-  // Mappa -> carosello
+  car.addEventListener('click',function(e){
+    var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();vaiA(cur+(+b.dataset.d));}return;}
+    var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
+  });
   Object.keys(pins).forEach(function(k){
     var p=pins[k];
-    function go(){overview=false;tutta.setAttribute('aria-pressed','false');tutta.textContent='Tutta la mappa';var i=ORDINE.indexOf(k==='start'?'start':+k);if(i===cur){flyTo(target());buzz();}else{vaiA(i);}}
+    function go(){var i=ORDINE.indexOf(k==='start'?'start':+k);if(i===cur){flyTo(onPin(Math.min(vb[2],W0)));buzz();}else{vaiA(i);}}
     p.addEventListener('click',go);
     p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
   });
-  tutta.addEventListener('click',function(){
-    overview=!overview;buzz();
-    tutta.setAttribute('aria-pressed',String(overview));tutta.textContent=overview?'Torna alla tappa':'Tutta la mappa';
-    flyTo(target());
-  });
-  addEventListener('resize',function(){if(!overview)setVB(target());});
 
-  // Avvio: partenza al centro, zoom immediato
+  // ----- Gesti: due dita = zoom, un dito = sposta -----
+  var ptr={},g=null;
+  function unit(){return vb[2]/Math.max(1,box.clientWidth);}
+  function toSvg(cx,cy){var r=box.getBoundingClientRect(),u=unit();return [vb[0]+(cx-r.left)*u,vb[1]+(cy-r.top)*u];}
+  function ids(){return Object.keys(ptr);}
+  function begin(){
+    var k=ids();
+    if(k.length===1){g={t:'pan',x:ptr[k[0]].x,y:ptr[k[0]].y,vb:vb.slice(),moved:0};}
+    else if(k.length>=2){var a=ptr[k[0]],b=ptr[k[1]];g={t:'pinch',d:Math.hypot(a.x-b.x,a.y-b.y)||1,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,vb:vb.slice(),moved:99};}
+  }
+  mapEl.addEventListener('pointerdown',function(e){ptr[e.pointerId]={x:e.clientX,y:e.clientY};cancelAnimationFrame(anim);begin();userMoved=false;});
+  mapEl.addEventListener('pointermove',function(e){
+    if(!ptr[e.pointerId]||!g)return;
+    ptr[e.pointerId]={x:e.clientX,y:e.clientY};var k=ids();
+    if(g.t==='pan'&&k.length===1){
+      var dx=e.clientX-g.x,dy=e.clientY-g.y;g.moved=Math.max(g.moved,Math.hypot(dx,dy));
+      if(g.moved>6){userMoved=true;var u=g.vb[2]/box.clientWidth;setVB([g.vb[0]-dx*u,g.vb[1]-dy*u,g.vb[2],g.vb[3]]);}
+    }else if(g.t==='pinch'&&k.length>=2){
+      userMoved=true;var a=ptr[k[0]],b=ptr[k[1]],d=Math.hypot(a.x-b.x,a.y-b.y)||1,mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+      var w=Math.max(WMIN,Math.min(WMAX,g.vb[2]*g.d/d)),hh=w*aspect(),r=box.getBoundingClientRect();
+      var u0=g.vb[2]/box.clientWidth,fx=g.vb[0]+(g.mx-r.left)*u0,fy=g.vb[1]+(g.my-r.top)*u0,u1=w/box.clientWidth;
+      setVB([fx-(mx-r.left)*u1,fy-(my-r.top)*u1,w,hh]);
+    }
+  });
+  function fine(e){delete ptr[e.pointerId];if(ids().length)begin();else g=null;}
+  mapEl.addEventListener('pointerup',fine);mapEl.addEventListener('pointercancel',fine);
+  mapEl.addEventListener('click',function(e){if(userMoved){e.stopPropagation();e.preventDefault();userMoved=false;}},true);
+  mapEl.addEventListener('wheel',function(e){e.preventDefault();var f=e.deltaY<0?1.2:1/1.2,p=toSvg(e.clientX,e.clientY);cancelAnimationFrame(anim);setVB(zoomBy(f,p[0],p[1]));},{passive:false});
+  document.getElementById('zin').addEventListener('click',function(){buzz();flyTo(zoomBy(1.6));});
+  document.getElementById('zout').addEventListener('click',function(){buzz();flyTo(zoomBy(1/1.6));});
+  addEventListener('resize',function(){setVB(vb);});
+
+  // Avvio: molto vicino, sulla partenza
   calcolaCentri();
-  cur=-1;attiva(0,{silenzioso:true});setVB(target());
+  svg.setAttribute('viewBox',FULL.join(' '));vb=FULL.slice();
+  cur=-1;attiva(0,{silenzioso:true});setVB(onPin(W0));
   requestAnimationFrame(function(){ready=true;});
 
   // Vetro che brilla dove tocchi
