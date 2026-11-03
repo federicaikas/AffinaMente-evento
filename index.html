@@ -74,15 +74,13 @@ section{padding:18px 0}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:58px;padding:12px 34px;border-radius:99px;border:1px solid rgba(255,255,255,.7);cursor:pointer;
   font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;color:var(--viola);
   background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(174,249,255,.92));box-shadow:inset 0 1.5px 0 #fff,0 8px 26px rgba(20,10,70,.4)}
-.btn,.chiudi,.tile,.sheet .nav button{transition:transform .12s ease}
-.btn:active,.chiudi:active,.tile:active,.sheet .nav button:active:not(:disabled){transform:scale(.94)}
+.btn,.card .nav button,.tuttamappa{transition:transform .12s ease}
+.btn:active,.card .nav button:active:not(:disabled),.tuttamappa:active{transform:scale(.94)}
 
 /* Mappa */
-.mappa h2{margin-bottom:6px}
-.mappa .hint{margin:0 0 12px;opacity:.9;font-size:16px}
-.mapbox{position:relative;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.45)}
-.mapscroll{background:var(--menta);line-height:0}
-#mappa-svg{display:block;width:100%;height:auto;max-height:86vh}
+.mapbox{position:relative;flex:1 1 auto;min-height:0;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.45)}
+.mapscroll{background:var(--menta);line-height:0;height:100%;touch-action:pan-y}
+#mappa-svg{display:block;width:100%;height:100%}
 .pin{cursor:pointer;outline:none}
 .pin-in{transform:scale(1.9);transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
 .pin.start .pin-in{transform:scale(2.05)}
@@ -95,54 +93,34 @@ section{padding:18px 0}
 .pin.sel text{fill:#f6da3b}
 .pin:focus-visible .pin-in{transform:scale(2.2)}
 .pin:focus-visible circle{stroke:#35177e}
-.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:12px 4px 0;opacity:.95}
-.legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
-/* Scheda (si apre dal pin) */
-.sheet{position:absolute;left:10px;right:10px;bottom:10px;z-index:5;padding:16px 18px 18px;transform:translateY(calc(100% + 24px));opacity:0;pointer-events:none;
   transition:transform .35s cubic-bezier(.2,.9,.3,1.1),opacity .25s}
-.sheet.open{transform:none;opacity:1;pointer-events:auto}
-.sheet.top{bottom:auto;top:10px;transform:translateY(calc(-100% - 24px))}
-.sheet.top.open{transform:none}
-.sheet .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--viola-chiaro)}
-.sheet{touch-action:none;-webkit-user-select:none;user-select:none}
-.sheet .grab{position:absolute;left:50%;top:6px;width:38px;height:4px;margin-left:-19px;border-radius:4px;background:rgba(45,27,120,.28)}
-.sheet.top .grab{top:auto;bottom:6px}
-.sheet h3{font-size:30px;margin:2px 0 10px;padding-right:44px}
-.sheet .nav{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
-.sheet .nav button{width:46px;height:46px;border-radius:50%;border:1px solid rgba(45,27,120,.22);background:rgba(255,255,255,.75);color:var(--viola);font-size:26px;line-height:1;cursor:pointer;padding:0 0 3px}
-.sheet .nav button:disabled{opacity:.3;cursor:default}
-#sh-corpo,.sheet h3,.sheet .n{transition:opacity .18s,transform .18s}
-.sheet.swap #sh-corpo,.sheet.swap h3,.sheet.swap .n{opacity:0;transform:translateX(calc(var(--dir,1)*14px))}
-.sheet dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px}
-.sheet dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);padding-top:1px}
-.sheet dd{margin:0}
-.sheet p{margin:0;font-size:16px}
-.chiudi{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(45,27,120,.2);background:rgba(255,255,255,.7);color:var(--viola);font-size:22px;line-height:1;cursor:pointer;z-index:3}
 .ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
 
-/* Elenco tappe */
-.elenco h2{margin-bottom:14px}
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tile{display:flex;align-items:center;gap:10px;min-height:62px;padding:8px 12px;border:1px solid rgba(255,255,255,.85);border-radius:20px;font:700 19px/1.05 var(--display);letter-spacing:.03em;text-transform:uppercase;text-align:left;color:var(--viola);cursor:pointer}
-.tile b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--giallo);display:flex;align-items:center;justify-content:center;font-size:19px}
-.tile.start{grid-column:1/-1;cursor:default;justify-content:flex-start;font-size:21px}
-.tile.start b{background:var(--viola);color:var(--giallo);border:2px solid #fff}
-.elenco .glass-light{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,255,255,.90))}
-.elenco details{margin-bottom:10px;border-radius:22px}
-.elenco summary{list-style:none;display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 16px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:23px;letter-spacing:.04em;text-transform:uppercase}
-.elenco summary::-webkit-details-marker{display:none}
-.elenco summary b{flex:none;width:38px;height:38px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font-size:21px}
-.elenco b.st{background:var(--viola);color:var(--giallo);border:2px solid #fff}
-.elenco .riga{display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 16px;margin-bottom:10px;border-radius:22px;font-family:var(--display);font-weight:700;font-size:23px;letter-spacing:.04em;text-transform:uppercase}
-.elenco .riga b{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
-.elenco summary::after{content:"+";margin-left:auto;font-size:26px;transition:transform .2s}
-.elenco details[open] summary::after{transform:rotate(45deg)}
-.elenco .corpo{padding:0 18px 16px 68px;font-size:16px}
-.elenco .corpo dl{margin:0 0 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
-.elenco .corpo dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro)}
-.elenco .corpo dd{margin:0}
 .link{background:none;border:0;padding:6px 0;color:var(--viola-chiaro);font:700 15px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px}
+
+/* App: mappa fissa in alto, card che scorrono sotto */
+.mappa{padding-top:8px}
+.app{display:flex;flex-direction:column;gap:12px;height:calc(100svh - 20px);min-height:560px;max-height:860px}
+.tuttamappa{position:absolute;top:10px;right:10px;z-index:4;min-height:44px;padding:0 16px;border-radius:22px;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.88);color:var(--viola);font:700 16px var(--display);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.conta{position:absolute;left:10px;top:10px;z-index:4;padding:8px 14px;border-radius:22px;background:rgba(53,23,126,.88);color:var(--giallo);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase}
+.carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:4px 7% 8px;margin:0 -16px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.carosello::-webkit-scrollbar{display:none}
+.card{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:16px 18px 18px;border-radius:24px;transform:scale(.94);opacity:.72;transition:transform .3s cubic-bezier(.2,.9,.3,1.2),opacity .3s}
+.card.att{transform:none;opacity:1}
+.card .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--viola-chiaro)}
+.card h3{font-size:28px;margin:2px 0 10px;line-height:1.02}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;line-height:1.3}
+.card dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);padding-top:1px}
+.card dd{margin:0}
+.card p{margin:0;font-size:16px;line-height:1.35}
+.card .nav{position:absolute;top:12px;right:12px;display:flex;gap:8px;z-index:3}
+.card .nav button{width:40px;height:40px;border-radius:50%;border:1px solid rgba(45,27,120,.22);background:rgba(255,255,255,.75);color:var(--viola);font-size:24px;line-height:1;cursor:pointer;padding:0 0 3px}
+.card .nav button:disabled{opacity:.3;cursor:default}
+.card.start h3{color:var(--viola)}
+.ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
+.legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
 /* Come funziona */
 .blocco{margin-top:34px;padding:22px 18px 22px}
@@ -168,9 +146,9 @@ footer .piccolo{font-size:12.5px;opacity:.78;margin-top:14px}
 @media (min-width:768px){
   body{font-size:18px}
   .hero{padding-top:56px}
-  .sheet{left:auto;width:400px}
+  .app{max-width:520px;margin:0 auto}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pin-in,.sheet,.btn,.tile{transition:none}.pulse,.pin.sel .pin-in,.calice,.calice .vino{animation:none}.glass::after{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pin-in,.btn,.card{transition:none}.pulse,.pin.sel .pin-in{animation:none}.glass::after{display:none}.carosello{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -188,9 +166,11 @@ footer .piccolo{font-size:12.5px;opacity:.78;margin-top:14px}
 <main>
 <section class="mappa" id="mappa">
   <div class="wrap">
-    <h2>La mappa</h2>
-    <div class="mapbox">
-      <div class="mapscroll" id="mapscroll">
+    <div class="app">
+      <div class="mapbox">
+        <div class="conta" id="conta" aria-live="polite"></div>
+        <button class="tuttamappa" id="tutta" type="button" aria-pressed="false">Tutta la mappa</button>
+        <div class="mapscroll" id="mapscroll">
 <svg xmlns="http://www.w3.org/2000/svg" id="mappa-svg" viewBox="640 120 1260 1800" role="group" aria-label="Mappa del percorso con le 11 tappe">
 <rect width="2046" height="2150" fill="#f5fff9"/>
 <g>
@@ -345,28 +325,15 @@ footer .piccolo{font-size:12.5px;opacity:.78;margin-top:14px}
 </g>
 
 </svg>
+        </div>
       </div>
-      <div class="sheet glass glass-light" id="sheet" role="dialog" aria-live="polite" aria-labelledby="sh-titolo" hidden>
-        <span class="grab" aria-hidden="true"></span>
-        <button class="chiudi" id="chiudi" type="button" aria-label="Chiudi la scheda">×</button>
-        <div class="n" id="sh-n"></div>
-        <h3 id="sh-titolo"></h3>
-        <div id="sh-corpo"></div>
-        <div class="nav"><button type="button" id="prec" aria-label="Tappa precedente">‹</button><button type="button" id="succ" aria-label="Tappa successiva">›</button></div>
-      </div>
+      <div class="carosello" id="carosello" role="list" aria-label="Le tappe del percorso"></div>
     </div>
     <div class="legenda" aria-hidden="true">
       <span><i style="background:#f6da3b;border:2px solid #fff"></i>Tappe</span>
       <span><i style="background:#35177e;border:2px solid #fff"></i>Partenza</span>
       <span><i style="background:#e5405a"></i>Punti di riferimento</span>
     </div>
-  </div>
-</section>
-
-<section class="elenco" id="elenco">
-  <div class="wrap">
-    <h2>Le tappe</h2>
-    <div id="lista"></div>
   </div>
 </section>
 
@@ -467,70 +434,110 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 
 (function(){
   var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var sheet=document.getElementById('sheet'),nEl=document.getElementById('sh-n'),tEl=document.getElementById('sh-titolo'),cEl=document.getElementById('sh-corpo');
-  var scroller=document.getElementById('mapscroll'),pins=document.querySelectorAll('#mappa-svg .pin'),lastFocus=null,current=null;
+  var svg=document.getElementById('mappa-svg'),box=document.querySelector('.mapbox'),car=document.getElementById('carosello'),conta=document.getElementById('conta'),tutta=document.getElementById('tutta');
+  var pins={};document.querySelectorAll('#mappa-svg .pin').forEach(function(p){pins[p.id==='pin-start'?'start':p.dataset.n]=p;});
+  var ORDINE=['start'];TAPPE.forEach(function(t){ORDINE.push(t.n);});
+  var FULL=[640,120,1260,1800],ZOOM=980,cur=-1,overview=false,vb=FULL.slice(),anim=0,ready=false;
 
   function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function ph(t){return /\[.*\]/.test(t)?'<span class="ph">'+esc(t)+'</span>':esc(t);}
-  function rows(t){return '<dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl>';}
-
-  function centerPin(el){
-    var r=el.getBoundingClientRect(),c=scroller.getBoundingClientRect();
-    var x=r.left-c.left+scroller.scrollLeft+r.width/2,y=r.top-c.top+scroller.scrollTop+r.height/2;
-    scroller.scrollTo({left:x-scroller.clientWidth/2,top:y-scroller.clientHeight*0.30,behavior:reduced?'auto':'smooth'});
-  }
-  function mark(key){pins.forEach(function(p){p.classList.toggle('sel',String(p.dataset.n||'start')===String(key));});}
-
   function buzz(){try{if(navigator.vibrate)navigator.vibrate(12);}catch(e){}}
-  var ORDINE=['start',1,2,3,4,5,6,7,8,9,10,11];
-  function vai(d){var i=ORDINE.indexOf(current)+d;if(i<0||i>=ORDINE.length)return;buzz();swap(d,function(){openSheet(ORDINE[i],{noCenter:true});});}
-  function swap(d,fn){sheet.style.setProperty('--dir',d>0?-1:1);sheet.classList.add('swap');setTimeout(function(){fn();requestAnimationFrame(function(){sheet.classList.remove('swap');});},140);}
-  function openSheet(key,opts){
+
+  // ----- Card -----
+  var h='';
+  ORDINE.forEach(function(k,i){
+    var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>\u2039</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>\u203a</button></div>';
+    if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="n">Partenza</div><h3>'+esc(START.nome)+'</h3><p>'+esc(START.testo)+'</p></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="n">Tappa '+t.n+' di '+TAPPE.length+'</div><h3>'+esc(t.nome)+'</h3><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
+  });
+  car.innerHTML=h;
+  var cards=car.querySelectorAll('.card');
+
+  // ----- Mappa: zoom animato sul pin -----
+  function aspect(){return box.clientHeight/Math.max(1,box.clientWidth);}
+  function target(){
+    if(overview)return FULL.slice();
+    var p=pins[ORDINE[cur<0?0:cur]],w=ZOOM,hh=w*aspect();
+    var m=svg.getScreenCTM().inverse(),r=p.getBoundingClientRect(),pt=svg.createSVGPoint();
+    pt.x=r.left+r.width/2;pt.y=r.top+r.height/2;
+    // coordinate del pin nel sistema del viewBox ATTUALE; le converto nel sistema del viewBox pieno
+    var c=pt.matrixTransform(m);
+    var cx=c.x,cy=c.y;
+    cx=Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,cx));
+    cy=Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,cy-hh*0.06));
+    return [cx-w/2,cy-hh/2,w,hh];
+  }
+  function setVB(v){vb=v;svg.setAttribute('viewBox',v.join(' '));}
+  function flyTo(to){
+    cancelAnimationFrame(anim);
+    if(reduced||!ready){setVB(to);return;}
+    var from=vb.slice(),t0=performance.now(),D=520;
+    (function f(now){var k=Math.min(1,(now-t0)/D);k=1-Math.pow(1-k,3);
+      setVB(from.map(function(a,i){return a+(to[i]-a)*k;}));
+      if(k<1)anim=requestAnimationFrame(f);})(t0);
+  }
+  // il pin non cambia posizione nello SVG: lo calcolo una volta sola a viewBox pieno
+  var centri={};
+  function calcolaCentri(){
+    setVB(FULL);
+    ORDINE.forEach(function(k){var p=pins[k],m=svg.getScreenCTM().inverse(),r=p.getBoundingClientRect(),pt=svg.createSVGPoint();pt.x=r.left+r.width/2;pt.y=r.top+r.height/2;var c=pt.matrixTransform(m);centri[k]={x:c.x,y:c.y};});
+  }
+  target=function(){
+    if(overview)return FULL.slice();
+    var c=centri[ORDINE[cur<0?0:cur]],w=ZOOM,hh=w*aspect();
+    var cx=Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,c.x));
+    var cy=Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,c.y));
+    return [cx-w/2,cy-hh/2,w,hh];
+  };
+
+  function attiva(i,opts){
     opts=opts||{};
-    var el=document.getElementById(key==='start'?'pin-start':'pin-'+key);
-    var mb=document.querySelector('.mapbox').getBoundingClientRect(),pr=el.getBoundingClientRect();
-    sheet.classList.toggle('top',(pr.top+pr.height/2-mb.top)>mb.height*0.5);
-    if(key==='start'){nEl.textContent='Partenza';tEl.textContent=START.nome;cEl.innerHTML='<p>'+esc(START.testo)+'</p>';}
-    else{var t=TAPPE[key-1];nEl.textContent='Tappa '+t.n+' di '+TAPPE.length;tEl.textContent=t.nome;cEl.innerHTML=rows(t);}
-    sheet.hidden=false;requestAnimationFrame(function(){sheet.classList.add('open');});
-    mark(key);current=key;
-    var i=ORDINE.indexOf(key);document.getElementById('prec').disabled=i<=0;document.getElementById('succ').disabled=i>=ORDINE.length-1;
+    if(i===cur)return;
+    cur=i;
+    var key=ORDINE[i];
+    Object.keys(pins).forEach(function(k){pins[k].classList.toggle('sel',String(k)===String(key));});
+    cards.forEach(function(c,j){c.classList.toggle('att',j===i);});
+    conta.textContent=key==='start'?'Partenza':'Tappa '+key+' / '+TAPPE.length;
+    if(!overview)flyTo(target());
+    if(!opts.silenzioso)buzz();
   }
-  function closeSheet(){
-    sheet.classList.remove('open');mark(null);current=null;
-    setTimeout(function(){if(!sheet.classList.contains('open'))sheet.hidden=true;},380);
-    if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
+  function vaiA(i,smooth){
+    i=Math.max(0,Math.min(ORDINE.length-1,i));
+    var c=cards[i];
+    car.scrollTo({left:c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,behavior:(reduced||smooth===false)?'auto':'smooth'});
   }
-  pins.forEach(function(p){
-    var key=p.id==='pin-start'?'start':p.dataset.n;
-    function go(e){lastFocus=p;buzz();openSheet(key);}
+  // Carosello -> mappa
+  var tick=0;
+  car.addEventListener('scroll',function(){
+    if(tick)return;
+    tick=requestAnimationFrame(function(){tick=0;
+      var mid=car.scrollLeft+car.clientWidth/2,best=0,d=1e9;
+      cards.forEach(function(c,j){var dd=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(dd<d){d=dd;best=j;}});
+      attiva(best);
+    });
+  },{passive:true});
+  car.addEventListener('click',function(e){
+    var b=e.target.closest('.nav button');if(b&&!b.disabled){vaiA(cur+(+b.dataset.d));return;}
+    var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
+  });
+  // Mappa -> carosello
+  Object.keys(pins).forEach(function(k){
+    var p=pins[k];
+    function go(){overview=false;tutta.setAttribute('aria-pressed','false');tutta.textContent='Tutta la mappa';var i=ORDINE.indexOf(k==='start'?'start':+k);if(i===cur){flyTo(target());buzz();}else{vaiA(i);}}
     p.addEventListener('click',go);
     p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
   });
-  document.getElementById('chiudi').addEventListener('click',closeSheet);
-  document.getElementById('prec').addEventListener('click',function(){vai(-1);});
-  document.getElementById('succ').addEventListener('click',function(){vai(1);});
-  // Swipe sulla scheda: giù (o su, se è in alto) chiude; sinistra/destra cambia tappa
-  var drag=null;
-  sheet.addEventListener('pointerdown',function(e){if(e.target.closest('button'))return;drag={x:e.clientX,y:e.clientY,dx:0,dy:0};try{sheet.setPointerCapture(e.pointerId);}catch(_){}sheet.style.transition='none';});
-  sheet.addEventListener('pointermove',function(e){if(!drag)return;drag.dx=e.clientX-drag.x;drag.dy=e.clientY-drag.y;var up=sheet.classList.contains('top');
-    if(Math.abs(drag.dx)>Math.abs(drag.dy))sheet.style.transform='translateX('+drag.dx*0.35+'px)';else sheet.style.transform='translateY('+(up?Math.min(0,drag.dy):Math.max(0,drag.dy))+'px)';});
-  function fine(){if(!drag)return;var d=drag;drag=null;sheet.style.transition='';sheet.style.transform='';var up=sheet.classList.contains('top');
-    if(Math.abs(d.dx)>60&&Math.abs(d.dx)>Math.abs(d.dy)){vai(d.dx<0?1:-1);}else if((up?-d.dy:d.dy)>50){buzz();closeSheet();}}
-  sheet.addEventListener('pointerup',fine);sheet.addEventListener('pointercancel',fine);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&current!==null)closeSheet();});
-  scroller.addEventListener('click',function(e){if(current!==null&&!e.target.closest('.pin'))closeSheet();});
-
-  // Elenco compatto: tessere a due colonne
-  var lista=document.getElementById('lista'),h='<div class="tiles">';
-  h+='<div class="tile start glass glass-light"><b aria-hidden="true">★</b>Partenza · '+esc(START.nome)+'</div>';
-  TAPPE.forEach(function(t){h+='<button class="tile glass glass-light" type="button" data-k="'+t.n+'"><b aria-hidden="true">'+t.n+'</b>'+esc(t.nome)+'</button>';});
-  lista.innerHTML=h+'</div>';
-  lista.addEventListener('click',function(e){
-    var b=e.target.closest('.tile[data-k]');if(!b)return;buzz();
-    document.getElementById('mappa').scrollIntoView({behavior:reduced?'auto':'smooth'});
-    setTimeout(function(){openSheet(+b.dataset.k);},reduced?0:450);
+  tutta.addEventListener('click',function(){
+    overview=!overview;buzz();
+    tutta.setAttribute('aria-pressed',String(overview));tutta.textContent=overview?'Torna alla tappa':'Tutta la mappa';
+    flyTo(target());
   });
+  addEventListener('resize',function(){if(!overview)setVB(target());});
+
+  // Avvio: partenza al centro, zoom immediato
+  calcolaCentri();
+  cur=-1;attiva(0,{silenzioso:true});setVB(target());
+  requestAnimationFrame(function(){ready=true;vaiA(0,false);});
 
   // Vetro che brilla dove tocchi
   function shine(e){var g=e.target.closest&&e.target.closest('.glass');if(!g)return;var r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');g.classList.add('shine');clearTimeout(g._s);g._s=setTimeout(function(){g.classList.remove('shine');},700);}
