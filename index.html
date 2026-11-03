@@ -462,8 +462,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   function clampVB(v){
     var w=Math.max(WMIN,Math.min(WMAX,v[2])),hh=w*aspect();
     var cx=v[0]+v[2]/2,cy=v[1]+v[3]/2;
-    cx=w>=FULL[2]?FULL[0]+FULL[2]/2:Math.max(FULL[0]+w/2,Math.min(FULL[0]+FULL[2]-w/2,cx));
-    cy=hh>=FULL[3]?FULL[1]+FULL[3]/2:Math.max(FULL[1]+hh/2,Math.min(FULL[1]+FULL[3]-hh/2,cy));
+    cx=Math.max(FULL[0],Math.min(FULL[0]+FULL[2],cx));
+    cy=Math.max(FULL[1],Math.min(FULL[1]+FULL[3],cy));
     return [cx-w/2,cy-hh/2,w,hh];
   }
   function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));}
