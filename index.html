@@ -525,7 +525,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   };
   var h='';
   ORDINE.forEach(function(k,i){
-    var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
+    var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente">'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva">'+DOWN+'</button></div>';
     {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="blk vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><i>'+esc(t.cantina)+'</i><b>'+esc(t.vino)+'</b></span></div><div class="blk cibo"><span class="ic">'+ICONE[t.tipo||'generico']+'</span><span><b>'+ph(t.stuz)+'</b></span></div><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
@@ -673,7 +673,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     var ok=e.target.closest('.ok');
     if(ok){var n=ok.dataset.ok,prima=Object.keys(fatte).length;if(fatte[n])delete fatte[n];else fatte[n]=1;salva();buzz();applica();
       if(prima<TAPPE.length&&Object.keys(fatte).length===TAPPE.length)setTimeout(festa,350);return;}
-    var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();vaiA(cur+(+b.dataset.d));}return;}
+    var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();var L=ORDINE.length;vaiA((cur+(+b.dataset.d)+L)%L);}return;}
     var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
   });
   Object.keys(pins).forEach(function(k){
