@@ -171,6 +171,7 @@ footer{padding:14px 0 calc(28px + env(safe-area-inset-bottom));text-align:center
 footer .firma{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
 footer p{margin:0 0 .35em}
 footer a{color:var(--giallo);font-weight:700;text-decoration:none;white-space:nowrap}
+footer .chiedi{margin:0 0 4px;font-family:var(--display);font-weight:700;font-size:20px;line-height:1.1;letter-spacing:.03em}
 footer .cta{font-family:var(--testo);font-weight:400;font-size:15px;line-height:1.35;letter-spacing:0;text-transform:none;margin:0 0 16px}
 footer .cta a{font-size:16px;font-weight:700;text-transform:none;white-space:nowrap}
 footer .contatti{margin-top:10px;font-size:13px;opacity:.9}
@@ -378,6 +379,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 
 <footer>
   <div class="wrap">
+    <p class="chiedi">Ti è piaciuta la giornata?</p>
     <p class="cta">Scatta la tua foto e taggaci su Instagram<br><a href="https://www.instagram.com/prolocodarfoboarioterme/" target="_blank" rel="noopener">@prolocodarfoboarioterme</a></p>
     <p class="piccolo">AFFINAMENTE è un evento organizzato dalla Proloco di Darfo in collaborazione con l'Associazione dei Commercianti della Cittadella e con il patrocinio del Comune di Darfo Boario Terme.</p>
     <p class="azzera" id="azzera-box" hidden><button type="button" id="azzera">Azzera le tappe segnate</button></p>
@@ -526,7 +528,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   function posEtichetta(){
     var key=ORDINE[cur<0?0:cur];
     if(key==='start'||!centri[key]){et.setAttribute('visibility','hidden');return;}
-    var c=centri[key],fs=Math.max(22,vb[2]*0.052);
+    var c=centri[key],fs=Math.max(19,vb[2]*0.044);
     ett.setAttribute('font-size',fs);ett.textContent=pins[key].dataset.nome;
     var w=ett.getComputedTextLength()+pins[key].dataset.nome.length*fs*0.04+fs*2.2,h=fs*1.7,gap=34*1.75+fs*0.45;
     var x=c.x,y=c.y-gap-h/2;
@@ -537,7 +539,21 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     et.setAttribute('visibility','visible');
   }
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();});
-  function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();}
+  // Punti di riferimento (Comune, Cinema): crescono quando si fa zoom out
+  var rifs=[];
+  svg.querySelectorAll('circle[fill="#e5405a"]').forEach(function(ci){
+    var cx=+ci.getAttribute('cx'),cy=+ci.getAttribute('cy'),g=document.createElementNS(NS,'g');
+    ci.parentNode.insertBefore(g,ci);g.appendChild(ci);
+    svg.querySelectorAll('text[fill="#e5405a"]').forEach(function(t){
+      if(Math.abs(+t.getAttribute('x')-cx)<120&&Math.abs(+t.getAttribute('y')-cy)<120)g.appendChild(t);
+    });
+    rifs.push({g:g,cx:cx,cy:cy});
+  });
+  function scalaRif(){
+    var k=Math.max(1,Math.min(2.8,vb[2]/820));
+    rifs.forEach(function(r){r.g.setAttribute('transform','translate('+r.cx+' '+r.cy+') scale('+k+') translate('+(-r.cx)+' '+(-r.cy)+')');});
+  }
+  function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));scalaRif();if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();}
   function flyTo(to,dur){
     cancelAnimationFrame(anim);to=clampVB(to);
     if(reduced||!ready){setVB(to);return;}
