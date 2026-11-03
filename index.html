@@ -89,6 +89,18 @@ section{padding:18px 0}
 @keyframes salto{0%{transform:scale(1.9)}40%{transform:scale(2.85)}100%{transform:scale(1.75)}}
 .pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
 @keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
+.fatte{position:absolute;left:8px;top:8px;z-index:4;padding:7px 13px;border-radius:22px;background:rgba(53,23,126,.9);color:#aef9ff;font:700 15px var(--display);letter-spacing:.08em;text-transform:uppercase}
+.card .top .ok{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--viola);background:#fff;color:var(--viola);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;transition:transform .12s,background .2s,color .2s}
+.card .top .ok svg{width:22px;height:22px;opacity:.45;transition:opacity .2s}
+.card .top .ok:active{transform:scale(.9)}
+.card.fatta .top .ok{background:var(--viola);color:#aef9ff;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.card.fatta .top .ok svg{opacity:1}
+.card.fatta .bd{background:#aef9ff}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+#mappa-svg polygon.fatta{fill:#aef9ff}
+.pin.fatta circle{fill:#aef9ff}
+footer .azzera{margin:14px 0 0}
+footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 12.5px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px;padding:0 10px}
 .pin.sel circle{fill:#35177e}
 .pin.sel text{fill:#f6da3b}
 .pin:focus-visible .pin-in{transform:scale(2.2)}
@@ -190,6 +202,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
   <div class="wrap">
     <div class="app">
       <div class="mapbox">
+        <div class="fatte" id="fatte" hidden aria-live="polite"></div>
         <div class="zoom" role="group" aria-label="Zoom mappa"><button type="button" id="zin" aria-label="Ingrandisci">+</button><button type="button" id="zout" aria-label="Riduci">−</button></div>
         <div class="mapscroll" id="mapscroll">
 <svg xmlns="http://www.w3.org/2000/svg" id="mappa-svg" viewBox="640 120 1260 1800" role="group" aria-label="Mappa del percorso con le 11 tappe">
@@ -359,6 +372,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
   <div class="wrap">
     <p class="cta">Scatta la tua foto e taggaci su Instagram<br><a href="https://www.instagram.com/prolocodarfoboarioterme/" target="_blank" rel="noopener">@prolocodarfoboarioterme</a></p>
     <p class="piccolo">AFFINAMENTE è un evento organizzato dalla Proloco di Darfo in collaborazione con l'Associazione dei Commercianti della Cittadella e con il patrocinio del Comune di Darfo Boario Terme.</p>
+    <p class="azzera" id="azzera-box" hidden><button type="button" id="azzera">Azzera le tappe segnate</button></p>
     <p class="contatti"><a href="tel:+393661947273">+39 366 194 7273</a><br><a href="mailto:prolocodarfoboarioterme@gmail.com">prolocodarfoboarioterme@gmail.com</a></p>
   </div>
 </footer>
@@ -452,10 +466,27 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
     if(k==='start'){h+='<article class="card start glass glass-light" role="listitem" data-i="0">'+nav+'<div class="top"><span class="bd" aria-hidden="true">\u2605</span><h3>'+esc(START.nome)+'</h3></div><p>'+esc(START.testo)+'</p></article>';}
-    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><span class="bd" aria-label="Tappa '+t.n+'">'+t.n+'</span><h3>'+esc(t.nome)+'</h3></div><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
+    else{var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'">'+nav+'<div class="top"><span class="bd" aria-label="Tappa '+t.n+'">'+t.n+'</span><h3>'+esc(t.nome)+'</h3><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna la tappa '+esc(t.nome)+' come assaggiata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div><dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
+
+  // ----- Tappe assaggiate (salvate sul telefono, nessun database) -----
+  var KEY='affinamente-2026-assaggiate',fatte={},cont=document.getElementById('fatte'),azz=document.getElementById('azzera-box');
+  try{fatte=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){fatte={};}
+  function salva(){try{localStorage.setItem(KEY,JSON.stringify(fatte));}catch(e){}}
+  function applica(){
+    var n=0;
+    TAPPE.forEach(function(t){
+      var f=!!fatte[t.n];if(f)n++;
+      var c=cards[ORDINE.indexOf(t.n)];c.classList.toggle('fatta',f);
+      var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));
+      if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);}
+      if(edif[t.n])edif[t.n].classList.toggle('fatta',f);
+    });
+    cont.hidden=n===0;cont.textContent=n===TAPPE.length?'Giro completato \u2713':n+' su '+TAPPE.length+' tappe';
+    azz.hidden=n===0;
+  }
 
   // ----- Mappa -----
   function aspect(){return box.clientHeight/Math.max(1,box.clientWidth);}
@@ -526,6 +557,8 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     });
   },{passive:true});
   car.addEventListener('click',function(e){
+    var ok=e.target.closest('.ok');
+    if(ok){var n=ok.dataset.ok;if(fatte[n])delete fatte[n];else fatte[n]=1;salva();buzz();applica();return;}
     var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();vaiA(cur+(+b.dataset.d));}return;}
     var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
   });
@@ -566,10 +599,11 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   mapEl.addEventListener('wheel',function(e){e.preventDefault();var f=e.deltaY<0?1.2:1/1.2,p=toSvg(e.clientX,e.clientY);cancelAnimationFrame(anim);setVB(zoomBy(f,p[0],p[1]));},{passive:false});
   document.getElementById('zin').addEventListener('click',function(){buzz();flyTo(zoomBy(1.6));});
   document.getElementById('zout').addEventListener('click',function(){buzz();flyTo(zoomBy(1/1.6));});
+  document.getElementById('azzera').addEventListener('click',function(){fatte={};salva();applica();});
   addEventListener('resize',function(){setVB(vb);});
 
   // Avvio: molto vicino, sulla partenza
-  calcolaCentri();trovaEdifici();
+  calcolaCentri();trovaEdifici();applica();
   svg.setAttribute('viewBox',FULL.join(' '));vb=FULL.slice();
   cur=-1;attiva(0,{silenzioso:true});setVB(onPin(W0));
   requestAnimationFrame(function(){ready=true;vaiA(0,true);});
