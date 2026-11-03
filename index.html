@@ -64,7 +64,7 @@ section{padding:18px 0}
 .hero{text-align:center;padding:30px 0 4px}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
 .logo{display:block;width:min(82%,380px);height:auto;margin:34px auto 8px}
-.data{margin:6px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(26px,8vw,34px);letter-spacing:.1em;text-transform:uppercase;color:var(--giallo)}
+.data{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(17px,5vw,21px);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap}
 .mappa .sub{margin:4px 0 14px;font-size:18px}
 .calice{flex:none;width:38px;height:auto;overflow:visible}
 .calice .vino{transform:translateY(0);animation:riempi 1.9s .5s cubic-bezier(.3,.7,.3,1) both}
@@ -76,7 +76,7 @@ section{padding:18px 0}
   background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(174,249,255,.92));box-shadow:inset 0 1.5px 0 #fff,0 8px 26px rgba(20,10,70,.4)}
 .btn,.btn:active,
 /* Mappa */
-.mapbox{position:sticky;top:8px;z-index:6;height:clamp(200px,31svh,300px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.5)}
+.mapbox{position:relative;height:clamp(210px,34svh,320px);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.5)}
 .mapscroll{background:var(--menta);line-height:0;height:100%;touch-action:none;cursor:grab}
 #mappa-svg{display:block;width:100%;height:100%}
 .pin{cursor:pointer;outline:none}
@@ -99,17 +99,17 @@ section{padding:18px 0}
 
 /* App: mappa fissa in alto, card che scorrono sotto */
 .mappa{padding-top:8px}
-.app{position:relative}
+.app{position:relative;display:flex;flex-direction:column;gap:12px}
 .zoom{position:absolute;right:8px;bottom:8px;z-index:4;display:flex;flex-direction:column;gap:6px}
 .zoom button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.9);background:rgba(255,255,255,.92);color:var(--viola);font:700 28px/1 var(--display);padding:0 0 3px;cursor:pointer;box-shadow:0 4px 14px rgba(20,10,70,.3);transition:transform .12s}
 .zoom button:active{transform:scale(.9)}
 .conta:empty{display:none}
 .conta{position:absolute;left:8px;top:8px;z-index:4;padding:7px 12px;border-radius:22px;background:rgba(53,23,126,.88);color:var(--giallo);font:700 16px var(--display);letter-spacing:.1em;text-transform:uppercase}
-.carosello{display:flex;flex-direction:column;gap:10px;padding:14px 0 30px}
+.carosello{flex:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 7% 10px;margin:0 -18px;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .carosello::-webkit-scrollbar{display:none}
-.card{position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.82;transition:opacity .3s,box-shadow .3s;cursor:pointer;text-align:left}
-.card{scroll-snap-align:start;scroll-margin-top:calc(clamp(200px,31svh,300px) + 30px)}
-.card.att{opacity:1;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
+.carosello::-webkit-scrollbar{display:none}
+.card{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always;position:relative;padding:14px 16px 16px;border-radius:22px;opacity:.78;transform:scale(.96);transition:opacity .3s,transform .3s cubic-bezier(.2,.9,.3,1.2),box-shadow .3s;text-align:left}
+.card.att{opacity:1;transform:none;box-shadow:0 0 0 3px var(--giallo),0 10px 28px rgba(20,10,70,.35)}
 .card .top{display:flex;align-items:center;gap:10px;min-height:44px;margin-bottom:6px}
 .card .bd{flex:none;width:38px;height:38px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font:700 22px/1 var(--display);box-shadow:0 0 0 2px #fff}
 .card.start .bd{background:var(--viola);color:var(--giallo)}
@@ -131,7 +131,7 @@ section{padding:18px 0}
 .legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 
 /* Come funziona */
-.blocco{margin-top:50px;padding:22px 18px 22px}
+.blocco{margin-top:56px;padding:22px 18px 22px}
 .passi{list-style:none;margin:0;padding:0}
 .passi li{display:flex;gap:14px;margin-bottom:18px}
 .passi li:last-child{margin-bottom:0}
@@ -159,7 +159,6 @@ footer .piccolo{max-width:36ch;margin-left:auto;margin-right:auto;font-size:12.5
   .app{max-width:520px;margin:0 auto}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pin-in,.btn,.card{transition:none}.pulse,.pin.sel .pin-in{animation:none}.glass::after{display:none}.carosello{scroll-behavior:auto}}
-html{scroll-snap-type:y proximity}
 </style>
 </head>
 <body>
@@ -175,7 +174,6 @@ html{scroll-snap-type:y proximity}
 <main>
 <section class="funziona">
   <div class="wrap">
-    <h2>Come funziona</h2>
     <div class="glass blocco"><img class="pg" src="illustrazione-affinamente.svg" alt="" aria-hidden="true" width="738" height="1244"><ol class="passi">
       <li><b aria-hidden="true">1</b><div><h3>Ritira il kit</h3><p>Il calice in vetro è un regalo per te.</p></div></li>
       <li><b aria-hidden="true">2</b><div><h3>Fai il giro</h3><p>Fatti timbrare il coupon in ogni tappa.</p></div></li>
@@ -186,8 +184,6 @@ html{scroll-snap-type:y proximity}
 
 <section class="mappa" id="mappa">
   <div class="wrap">
-    <h2>La mappa</h2>
-    <p class="sub">Tocca la mappa e scopri il tuo percorso gourmet.</p>
     <div class="app">
       <div class="mapbox">
         <div class="conta" id="conta" aria-live="polite"></div>
@@ -449,7 +445,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   function buzz(){try{if(navigator.vibrate)navigator.vibrate(12);}catch(e){}}
 
   // ----- Card -----
-  var UP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13l6-6 6 6"/></svg>',DOWN='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7l6 6 6-6"/></svg>';
+  var UP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4l-6 6 6 6"/></svg>',DOWN='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>';
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
@@ -500,21 +496,19 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     flyTo(onPin(vb[2]));
     if(!opts.silenzioso)buzz();
   }
-  function linea(){return box.getBoundingClientRect().bottom+40;}
-  function vaiA(i){
-    i=Math.max(0,Math.min(ORDINE.length-1,i));
-    var top=cards[i].getBoundingClientRect().top+scrollY-(box.offsetHeight+8+22);
-    scrollTo({top:top,behavior:reduced?'auto':'smooth'});
+  function vaiA(i,instant){
+    i=Math.max(0,Math.min(ORDINE.length-1,i));var c=cards[i];
+    car.scrollTo({left:c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,behavior:(reduced||instant)?'auto':'smooth'});
   }
   var tick=0;
-  function aggiorna(){tick=0;
-    var L=linea(),best=0;
-    cards.forEach(function(c,j){if(c.getBoundingClientRect().top<=L)best=j;});
-    if(innerHeight+scrollY>=document.documentElement.scrollHeight-6)best=cards.length-1;
-    if(car.getBoundingClientRect().top>L)best=0;
-    attiva(best);
-  }
-  addEventListener('scroll',function(){if(!tick)tick=requestAnimationFrame(aggiorna);},{passive:true});
+  car.addEventListener('scroll',function(){
+    if(tick)return;
+    tick=requestAnimationFrame(function(){tick=0;
+      var mid=car.scrollLeft+car.clientWidth/2,best=0,d=1e9;
+      cards.forEach(function(c,j){var dd=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(dd<d){d=dd;best=j;}});
+      attiva(best);
+    });
+  },{passive:true});
   car.addEventListener('click',function(e){
     var b=e.target.closest('.nav button');if(b){if(!b.disabled){buzz();vaiA(cur+(+b.dataset.d));}return;}
     var c=e.target.closest('.card');if(c&&+c.dataset.i!==cur)vaiA(+c.dataset.i);
@@ -562,7 +556,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   calcolaCentri();
   svg.setAttribute('viewBox',FULL.join(' '));vb=FULL.slice();
   cur=-1;attiva(0,{silenzioso:true});setVB(onPin(W0));
-  requestAnimationFrame(function(){ready=true;});
+  requestAnimationFrame(function(){ready=true;vaiA(0,true);});
 
   // Vetro che brilla dove tocchi
   function shine(e){var g=e.target.closest&&e.target.closest('.glass');if(!g)return;var r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');g.classList.add('shine');clearTimeout(g._s);g._s=setTimeout(function(){g.classList.remove('shine');},700);}
