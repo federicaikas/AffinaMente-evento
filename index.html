@@ -528,7 +528,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     if(key==='start'||!centri[key]){et.setAttribute('visibility','hidden');return;}
     var c=centri[key],fs=Math.max(22,vb[2]*0.052);
     ett.setAttribute('font-size',fs);ett.textContent=pins[key].dataset.nome;
-    var w=ett.getComputedTextLength()+fs*1.1,h=fs*1.5,gap=34*1.75+fs*0.45;
+    var w=ett.getComputedTextLength()+pins[key].dataset.nome.length*fs*0.04+fs*2.2,h=fs*1.7,gap=34*1.75+fs*0.45;
     var x=c.x,y=c.y-gap-h/2;
     if(y-h/2<vb[1]+6)y=c.y+gap+h/2;
     x=Math.max(vb[0]+w/2+8,Math.min(vb[0]+vb[2]-w/2-8,x));
@@ -536,11 +536,12 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     ett.setAttribute('x',x);ett.setAttribute('y',y+fs*0.34);
     et.setAttribute('visibility','visible');
   }
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();});
   function setVB(v){vb=clampVB(v);svg.setAttribute('viewBox',vb.join(' '));if(typeof posEtichetta==='function'&&Object.keys(centri).length)posEtichetta();}
-  function flyTo(to){
+  function flyTo(to,dur){
     cancelAnimationFrame(anim);to=clampVB(to);
     if(reduced||!ready){setVB(to);return;}
-    var from=vb.slice(),t0=performance.now(),D=520;
+    var from=vb.slice(),t0=performance.now(),D=dur||520;
     (function f(now){var k=Math.min(1,(now-t0)/D);k=1-Math.pow(1-k,3);
       setVB(from.map(function(a,i){return a+(to[i]-a)*k;}));
       if(k<1)anim=requestAnimationFrame(f);})(t0);
@@ -579,22 +580,36 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
     cards.forEach(function(c,j){c.classList.toggle('att',j===i);});
     svg.querySelectorAll('polygon.acceso').forEach(function(p){p.classList.remove('acceso');});
     if(edif[key])edif[key].classList.add('acceso');
-    flyTo(onPin(vb[2]));
+    flyTo(onPin(vb[2]),opts.dur);
     if(!opts.silenzioso)buzz();
   }
+  var auto=0;
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
   function vaiA(i,instant){
     i=Math.max(0,Math.min(ORDINE.length-1,i));var c=cards[i];
-    car.scrollTo({left:c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,behavior:(reduced||instant)?'auto':'smooth'});
+    var to=c.offsetLeft-(car.clientWidth-c.offsetWidth)/2,from=car.scrollLeft,dist=Math.abs(i-(cur<0?0:cur));
+    cancelAnimationFrame(auto);
+    if(reduced||instant){car.style.scrollBehavior='auto';car.scrollLeft=to;attiva(i,{silenzioso:true});return;}
+    var D=Math.min(1300,450+110*Math.max(0,dist-1));
+    attiva(i,{dur:D});
+    car.style.scrollSnapType='none';car.style.scrollBehavior='auto';
+    var t0=performance.now();
+    auto=requestAnimationFrame(function f(now){
+      var k=Math.min(1,(now-t0)/D);car.scrollLeft=from+(to-from)*ease(k);
+      if(k<1)auto=requestAnimationFrame(f);else{auto=0;car.style.scrollSnapType='';car.style.scrollBehavior='';}
+    });
   }
   var tick=0;
   car.addEventListener('scroll',function(){
-    if(tick)return;
+    if(tick||auto)return;
     tick=requestAnimationFrame(function(){tick=0;
       var mid=car.scrollLeft+car.clientWidth/2,best=0,d=1e9;
       cards.forEach(function(c,j){var dd=Math.abs(c.offsetLeft+c.offsetWidth/2-mid);if(dd<d){d=dd;best=j;}});
       attiva(best);
     });
   },{passive:true});
+  // se l'utente tocca il carosello durante l'animazione, riprende il controllo
+  car.addEventListener('pointerdown',function(){if(auto){cancelAnimationFrame(auto);auto=0;car.style.scrollSnapType='';car.style.scrollBehavior='';}},{passive:true});
   car.addEventListener('click',function(e){
     var ok=e.target.closest('.ok');
     if(ok){var n=ok.dataset.ok;if(fatte[n])delete fatte[n];else fatte[n]=1;salva();buzz();applica();return;}
