@@ -64,7 +64,7 @@ section{padding:18px 0}
 
 /* Hero */
 .hero{text-align:center;padding:6px 0 4px}
-.hero-video{display:block;width:min(74%,300px);height:auto;aspect-ratio:480/524;margin:0 auto -6px;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 72%,transparent 100%);pointer-events:none}
+.hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 20px calc(50% - min(50vw,240px));pointer-events:none}
 .hero .badge{margin-top:0}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
 .logo{display:block;width:min(82%,380px);height:auto;margin:24px auto 8px}
@@ -177,7 +177,7 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 @keyframes cade{0%{transform:translate3d(0,-20px,0) rotate(0);opacity:1}100%{transform:translate3d(var(--dx),105vh,0) rotate(var(--rot));opacity:1}}
 
 /* Come funziona */
-.blocco{width:var(--cw);margin:56px auto 0;padding:22px 18px 22px}
+.blocco{width:var(--cw);margin:32px auto 0;padding:22px 18px 22px}
 .passi{list-style:none;margin:0;padding:0}
 .passi li{position:relative;display:flex;gap:14px;margin-bottom:20px}
 .passi li:not(:last-child)::after{content:"";position:absolute;left:18.5px;top:40px;bottom:-20px;width:3px;border-radius:2px;background:var(--giallo);opacity:.75}
@@ -185,7 +185,6 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .passi b{flex:none;width:40px;height:40px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:25px;position:relative;z-index:1}
 .passi h3{font-weight:700;-webkit-text-stroke:.6px currentColor;font-size:24px;line-height:1.05;color:var(--giallo);margin-bottom:1px}
 .passi p{margin:0;font-size:16px;line-height:1.2}
-.pg{position:absolute;right:-30px;top:-62px;width:100px;height:auto;z-index:2}
 .passi li:first-child>div{padding-right:62px}
 
 /* Aiuto + footer */
@@ -225,7 +224,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 <main>
 <section class="funziona">
   <div class="wrap">
-    <div class="glass blocco"><img class="pg" src="illustrazione-affinamente.svg" alt="" aria-hidden="true" width="738" height="1244"><ol class="passi">
+    <div class="glass blocco"><ol class="passi">
       <li><b aria-hidden="true">1</b><div><h3>Ritira il kit</h3><p>Il calice in vetro è un regalo per te.</p></div></li>
       <li><b aria-hidden="true">2</b><div><h3>Fai il giro</h3><p>Fatti timbrare il coupon in ogni tappa.</p></div></li>
       <li><b aria-hidden="true">3</b><div><h3>Scopri i negozi</h3><p>Passeggia fra i negozi della cittadella.</p></div></li>
