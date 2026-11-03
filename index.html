@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AFFINAMENTE · La tua guida alla giornata</title>
+<meta name="description" content="AFFINAMENTE, domenica 6 dicembre a Corna di Darfo: la mappa interattiva con le 11 tappe del percorso.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2d1b78">
+<style>
+@font-face{font-family:"Chivo";font-weight:400;font-display:swap;src:url(fonts/chivo-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Chivo";font-weight:700;font-display:swap;src:url(fonts/chivo-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
+
+:root{
+  --viola:#2d1b78; --viola2:#35177e; --viola-chiaro:#5b3a9e; --lilla:#c3a8e5; --giallo:#f6da3b; --ciano:#aef9ff; --rosso:#e5405a; --menta:#f5fff9;
+  --display:"DIN Alternate","DIN Next","Barlow Condensed","Arial Narrow",sans-serif;
+  --testo:"Chivo",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent}
+button,a,.pin{touch-action:manipulation}
+.pin{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font-family:var(--testo);font-size:17px;line-height:1.5;color:#fff;background:linear-gradient(180deg,var(--viola),var(--viola2));overflow-x:hidden}
+/* sfondo con macchie di colore: è ciò che il vetro "rifrange" */
+body::before{content:"";position:fixed;inset:-10% -10%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(34% 26% at 12% 8%,rgba(246,218,59,.42),transparent 70%),
+    radial-gradient(36% 28% at 92% 26%,rgba(174,249,255,.34),transparent 70%),
+    radial-gradient(38% 30% at 6% 62%,rgba(229,64,90,.32),transparent 70%),
+    radial-gradient(40% 30% at 90% 88%,rgba(195,168,229,.42),transparent 70%)}
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.03em;margin:0;line-height:1.05;font-weight:700}
+h2{font-size:clamp(32px,8.5vw,44px)}
+p{margin:0 0 .9em}
+a{color:inherit}
+.wrap{width:100%;max-width:760px;margin:0 auto;padding:0 18px}
+section{padding:18px 0}
+:focus-visible{outline:3px solid var(--giallo);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Liquid glass */
+.glass{position:relative;border-radius:26px;
+  background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.05)),rgba(45,27,120,.40);
+  border:1px solid rgba(255,255,255,.32);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12),0 12px 36px rgba(20,10,70,.38);
+  -webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.38),rgba(255,255,255,0) 32%,rgba(255,255,255,0) 68%,rgba(255,255,255,.16))}
+.glass>*{position:relative}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;mix-blend-mode:overlay;
+  background:radial-gradient(190px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.75),rgba(255,255,255,0) 62%)}
+.glass.shine::after{opacity:1;transition:opacity .12s}
+.glass-light::after{mix-blend-mode:normal;background:radial-gradient(170px circle at var(--mx,50%) var(--my,0%),rgba(140,105,255,.20),rgba(140,105,255,0) 62%)}
+.glass-light{background:linear-gradient(135deg,rgba(255,255,255,.80),rgba(255,255,255,.58));color:var(--viola);border-color:rgba(255,255,255,.85);
+  box-shadow:inset 0 1.5px 0 #fff,0 14px 40px rgba(30,15,90,.42);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{background:rgba(70,45,150,.92)} .glass-light{background:rgba(255,255,255,.96)}
+}
+@media (prefers-reduced-transparency:reduce){.glass{background:rgba(70,45,150,.96);-webkit-backdrop-filter:none;backdrop-filter:none}.glass-light{background:#fff}}
+
+/* Hero */
+.hero{text-align:center;padding:30px 0 4px}
+.badge{display:inline-block;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
+.logo{display:block;width:min(82%,380px);height:auto;margin:34px auto 8px}
+.intro{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px auto 10px}
+.hero p.sub{font-size:19px;max-width:23ch;margin:0;text-align:left}
+.calice{flex:none;width:38px;height:auto;overflow:visible}
+.calice .vino{transform:translateY(0);animation:riempi 1.9s .5s cubic-bezier(.3,.7,.3,1) both}
+.calice{transform-origin:50% 90%;animation:brindisi .7s 2.5s ease-in-out both}
+@keyframes riempi{from{transform:translateY(30px)}to{transform:translateY(0)}}
+@keyframes brindisi{0%,100%{transform:rotate(0)}30%{transform:rotate(-9deg)}65%{transform:rotate(6deg)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:58px;padding:12px 34px;border-radius:99px;border:1px solid rgba(255,255,255,.7);cursor:pointer;
+  font-family:var(--display);font-weight:700;font-size:25px;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;color:var(--viola);
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(174,249,255,.92));box-shadow:inset 0 1.5px 0 #fff,0 8px 26px rgba(20,10,70,.4)}
+.btn,.chiudi,.tile,.sheet .nav button{transition:transform .12s ease}
+.btn:active,.chiudi:active,.tile:active,.sheet .nav button:active:not(:disabled){transform:scale(.94)}
+
+/* Mappa */
+.mappa h2{margin-bottom:6px}
+.mappa .hint{margin:0 0 12px;opacity:.9;font-size:16px}
+.mapbox{position:relative;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.6);box-shadow:0 14px 40px rgba(20,10,70,.45)}
+.mapscroll{background:var(--menta);line-height:0}
+#mappa-svg{display:block;width:100%;height:auto;max-height:86vh}
+.pin{cursor:pointer;outline:none}
+.pin-in{transform:scale(1.9);transition:transform .22s cubic-bezier(.3,1.5,.5,1)}
+.pin.start .pin-in{transform:scale(2.05)}
+.pin:hover .pin-in{transform:scale(2.1)}
+.pin.sel .pin-in{transform:scale(2.35);animation:salto .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes salto{0%{transform:scale(1.9)}40%{transform:scale(2.85)}100%{transform:scale(2.35)}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:onda 2.3s ease-out infinite}
+@keyframes onda{0%{transform:scale(1);opacity:.95}100%{transform:scale(2.1);opacity:0}}
+.pin.sel circle{fill:#35177e}
+.pin.sel text{fill:#f6da3b}
+.pin:focus-visible .pin-in{transform:scale(2.2)}
+.pin:focus-visible circle{stroke:#35177e}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:12px 4px 0;opacity:.95}
+.legenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+/* Scheda (si apre dal pin) */
+.sheet{position:absolute;left:10px;right:10px;bottom:10px;z-index:5;padding:16px 18px 18px;transform:translateY(calc(100% + 24px));opacity:0;pointer-events:none;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.1),opacity .25s}
+.sheet.open{transform:none;opacity:1;pointer-events:auto}
+.sheet.top{bottom:auto;top:10px;transform:translateY(calc(-100% - 24px))}
+.sheet.top.open{transform:none}
+.sheet .n{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--viola-chiaro)}
+.sheet{touch-action:none;-webkit-user-select:none;user-select:none}
+.sheet .grab{position:absolute;left:50%;top:6px;width:38px;height:4px;margin-left:-19px;border-radius:4px;background:rgba(45,27,120,.28)}
+.sheet.top .grab{top:auto;bottom:6px}
+.sheet h3{font-size:30px;margin:2px 0 10px;padding-right:44px}
+.sheet .nav{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+.sheet .nav button{width:46px;height:46px;border-radius:50%;border:1px solid rgba(45,27,120,.22);background:rgba(255,255,255,.75);color:var(--viola);font-size:26px;line-height:1;cursor:pointer;padding:0 0 3px}
+.sheet .nav button:disabled{opacity:.3;cursor:default}
+#sh-corpo,.sheet h3,.sheet .n{transition:opacity .18s,transform .18s}
+.sheet.swap #sh-corpo,.sheet.swap h3,.sheet.swap .n{opacity:0;transform:translateX(calc(var(--dir,1)*14px))}
+.sheet dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px}
+.sheet dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro);padding-top:1px}
+.sheet dd{margin:0}
+.sheet p{margin:0;font-size:16px}
+.chiudi{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(45,27,120,.2);background:rgba(255,255,255,.7);color:var(--viola);font-size:22px;line-height:1;cursor:pointer;z-index:3}
+.ph{font-style:italic;border-bottom:1px dashed currentColor;opacity:.85}
+
+/* Elenco tappe */
+.elenco h2{margin-bottom:14px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{display:flex;align-items:center;gap:10px;min-height:62px;padding:8px 12px;border:1px solid rgba(255,255,255,.85);border-radius:20px;font:700 19px/1.05 var(--display);letter-spacing:.03em;text-transform:uppercase;text-align:left;color:var(--viola);cursor:pointer}
+.tile b{flex:none;width:34px;height:34px;border-radius:50%;background:var(--giallo);display:flex;align-items:center;justify-content:center;font-size:19px}
+.tile.start{grid-column:1/-1;cursor:default;justify-content:flex-start;font-size:21px}
+.tile.start b{background:var(--viola);color:var(--giallo);border:2px solid #fff}
+.elenco .glass-light{background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,255,255,.90))}
+.elenco details{margin-bottom:10px;border-radius:22px}
+.elenco summary{list-style:none;display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 16px;cursor:pointer;font-family:var(--display);font-weight:700;font-size:23px;letter-spacing:.04em;text-transform:uppercase}
+.elenco summary::-webkit-details-marker{display:none}
+.elenco summary b{flex:none;width:38px;height:38px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font-size:21px}
+.elenco b.st{background:var(--viola);color:var(--giallo);border:2px solid #fff}
+.elenco .riga{display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 16px;margin-bottom:10px;border-radius:22px;font-family:var(--display);font-weight:700;font-size:23px;letter-spacing:.04em;text-transform:uppercase}
+.elenco .riga b{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.elenco summary::after{content:"+";margin-left:auto;font-size:26px;transition:transform .2s}
+.elenco details[open] summary::after{transform:rotate(45deg)}
+.elenco .corpo{padding:0 18px 16px 68px;font-size:16px}
+.elenco .corpo dl{margin:0 0 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.elenco .corpo dt{font-family:var(--display);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--viola-chiaro)}
+.elenco .corpo dd{margin:0}
+.link{background:none;border:0;padding:6px 0;color:var(--viola-chiaro);font:700 15px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px}
+
+/* Come funziona */
+.blocco{margin-top:34px;padding:22px 18px 22px}
+.passi{list-style:none;margin:0;padding:0}
+.passi li{display:flex;gap:14px;margin-bottom:18px}
+.passi li:last-child{margin-bottom:0}
+.passi b{flex:none;width:40px;height:40px;border-radius:50%;background:var(--giallo);color:var(--viola);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px}
+.passi h3{font-size:24px;color:var(--giallo);margin-bottom:2px}
+.passi p{margin:0;font-size:16px}
+.pg{position:absolute;right:10px;top:-44px;width:78px;height:auto;z-index:2}
+.passi li:first-child>div{padding-right:84px}
+
+/* Aiuto + footer */
+.aiuto .glass{padding:20px 18px}
+.aiuto h2{margin-bottom:10px}
+.aiuto a{color:var(--giallo);font-weight:700}
+footer{padding:22px 0 calc(34px + env(safe-area-inset-bottom));text-align:center;font-size:14px;opacity:.92}
+footer .firma{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+footer p{margin:0 0 .35em}
+footer a{color:var(--giallo);font-weight:700;text-decoration:none;white-space:nowrap}
+footer .piccolo{font-size:12.5px;opacity:.78;margin-top:14px}
+
+@media (min-width:768px){
+  body{font-size:18px}
+  .hero{padding-top:56px}
+  .sheet{left:auto;width:400px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.pin-in,.sheet,.btn,.tile{transition:none}.pulse,.pin.sel .pin-in,.calice,.calice .vino{animation:none}.glass::after{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge glass">Settima edizione · domenica 6 dicembre</span>
+    <img class="logo" src="logo-affinamente.svg" alt="AFFINAMENTE 2026" width="962" height="347">
+    <div class="intro">
+      <svg class="calice" viewBox="0 0 40 62" aria-hidden="true"><defs><clipPath id="cc"><path d="M7 3h26c1 17-4 29-13 31C11 32 6 20 7 3Z"/></clipPath></defs>
+        <g clip-path="url(#cc)"><rect class="vino" x="0" y="14" width="40" height="40" fill="#e5405a"/></g>
+        <path d="M7 3h26c1 17-4 29-13 31C11 32 6 20 7 3Z" fill="rgba(255,255,255,.12)" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M20 34v21M11 58h18" stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>
+      <p class="sub">Tocca la mappa e scopri il tuo percorso gourmet.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="mappa" id="mappa">
+  <div class="wrap">
+    <h2>La mappa</h2>
+    <div class="mapbox">
+      <div class="mapscroll" id="mapscroll">
+<svg xmlns="http://www.w3.org/2000/svg" id="mappa-svg" viewBox="640 120 1260 1800" role="group" aria-label="Mappa del percorso con le 11 tappe">
+<rect width="2046" height="2150" fill="#f5fff9"/>
+<g>
+<polygon points="362,72 700,-10 975,-10 975,25 748,200 490,350 418,210" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="108,45 175,10 235,125 165,160" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="0,60 60,5 115,130 0,210" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="8,20 45,15 72,50 38,78" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="243,395 370,335 463,520 340,585" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="170,432 212,413 322,592 190,692 136,605" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="152,712 272,658 250,722 168,748" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="188,775 290,722 325,775 212,835" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="493,520 592,450 636,520 540,585" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="495,740 595,665 636,715 542,805" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="762,228 850,178 882,245 795,290" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="727,252 765,240 805,290 765,330" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="830,615 915,560 975,640 890,705" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="918,665 1020,630 1090,755 965,815" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1012,598 1085,560 1128,683 1075,718" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="748,693 815,643 862,700 795,755" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="835,745 866,733 895,765 865,795" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="875,375 920,360 930,400 890,410" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="300,880 430,780 470,825 380,900 370,935 290,915" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="165,1000 235,960 285,1040 215,1095 175,1095" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="890,440 935,415 985,500 940,535" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="960,420 1020,395 1070,470 1000,505" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1010,400 1075,370 1100,430 1040,470" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1070,350 1130,335 1150,415 1105,445" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="975,495 1030,500 1045,565 1005,578" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1030,520 1105,488 1118,545 1060,558" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1060,560 1110,555 1112,605 1075,610" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1052,68 1120,10 1150,60 1105,95" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1065,128 1135,80 1175,140 1115,180" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1128,85 1185,35 1217,92 1172,126" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1120,185 1180,150 1230,215 1170,245" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1207,170 1245,55 1302,130 1240,200" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1170,300 1250,240 1310,320 1245,392" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1258,0 1425,0 1370,115 1330,115" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1440,155 1520,105 1555,175 1470,215" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1520,70 1580,60 1625,110 1570,120" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1475,15 1545,0 1515,70 1478,55" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1580,25 1640,0 1735,0 1735,80 1690,80" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1255,390 1330,385 1342,470 1270,478" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1325,372 1440,298 1470,335 1380,395" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1395,335 1475,318 1510,385 1445,445" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1550,305 1625,275 1620,420 1568,398" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1545,205 1625,280 1625,300 1570,300" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1340,215 1400,150 1440,200 1380,260" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1385,430 1430,425 1440,480 1390,485" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1120,500 1185,490 1195,620 1150,600" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1250,583 1320,572 1345,680 1272,696" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1335,570 1435,545 1430,655 1360,685" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1425,610 1500,625 1555,710 1500,740" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1395,740 1470,690 1500,760 1440,795" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1497,560 1590,555 1590,625 1500,628" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1660,540 1730,545 1730,650 1665,650" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1685,650 1742,652 1742,700 1690,702" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1550,790 1720,718 1712,865 1600,915" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1143,765 1250,705 1280,950 1177,970" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1215,960 1290,950 1285,1090 1245,1085" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1250,1115 1310,1090 1370,1215 1330,1300 1250,1235" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1258,745 1345,705 1375,780 1310,810" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1275,808 1355,790 1385,865 1295,890" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1120,700 1160,688 1190,740 1148,762" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1072,785 1120,785 1150,840 1105,865" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1895,300 1985,310 1975,385 1900,385" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1905,405 1975,402 1987,500 1900,525" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1905,555 1998,558 1998,632 1908,635" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1905,690 2025,678 2028,740 1910,755" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1982,150 2046,150 2046,298 1980,298" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1540,990 1690,935 1718,1030 1630,1050 1640,1100 1600,1105" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1845,1005 1875,1000 1875,1045 1845,1045" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1842,1090 1925,1095 1920,1180 1840,1175" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1985,800 2046,790 2046,910 2000,905" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1500,1300 1690,1230 1705,1290 1500,1350" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1800,1390 1830,1340 1900,1380 1850,1440" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1845,1320 1980,1275 2046,1560 1920,1620 1800,1560" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1800,1450 1860,1440 1920,1620 1830,1622" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1650,1490 1790,1440 1830,1540 1700,1600" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1005,1060 1075,1030 1115,1100 1060,1150" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1100,1170 1185,1075 1285,1090 1290,1185 1110,1245" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="945,1250 1005,1215 1057,1275 995,1330" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="878,1350 940,1302 1010,1380 940,1425" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="938,1370 1000,1400 1135,1555 1100,1590 1000,1500" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1135,1295 1290,1210 1280,1260 1190,1330 1140,1330" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1080,1450 1190,1390 1300,1480 1240,1545 1150,1500" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1310,1410 1380,1370 1500,1470 1470,1550 1380,1510" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="740,1105 795,1100 925,1255 922,1320 850,1320" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="648,1312 712,1252 822,1400 745,1470 715,1385" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="705,1460 745,1430 790,1470 765,1500" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="800,1550 870,1540 900,1622 790,1622" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="495,1100 570,1093 618,1455 540,1445" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="335,1330 450,1308 500,1500 380,1535" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="202,1190 240,1170 270,1230 400,1180 395,1240 268,1305" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="0,1180 55,1215 25,1262 0,1255" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="0,1270 70,1300 25,1352 0,1350" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="0,1445 55,1470 90,1545 30,1592 0,1560" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="0,1385 95,1345 75,1400 0,1415" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="340,1540 420,1505 480,1545 480,1622 340,1622" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="120,1400 215,1350 240,1390 160,1440" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="530,1598 729,1581 752,1840 553,1857" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1263,1812 1361,1744 1419,1826 1321,1894" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1407,1989 1548,1938 1595,2069 1454,2120" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1139,2037 1243,1977 1303,2081 1199,2141" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1013,1643 1210,1489 1309,1615 1112,1769" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="959,1808 1133,1708 1203,1830 1029,1930" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1062,1942 1261,1849 1320,1976 1121,2069" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="847,1883 917,1843 947,1895 877,1935" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="501,1569 601,1569 601,1689 501,1689" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="788,1483 884,1428 934,1515 838,1570" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="1176,1557 1323,1454 1426,1601 1279,1704" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<polygon points="461,1935 641,1803 741,1843 791,1943 645,2039" fill="#c3a8e5" stroke="#f5fff9" stroke-width="5" stroke-linejoin="round"/>
+<path d="M1845,-10 C1840,42 1824,198 1815,300 C1806,402 1797,483 1790,600 C1783,717 1781,850 1775,1000 C1769,1150 1760,1307 1753,1500 C1746,1693 1734,2050 1730,2160" fill="none" stroke="#6730a0" stroke-width="30" opacity=".25" stroke-linecap="round"/>
+<path d="M1845,-10 C1840,42 1824,198 1815,300 C1806,402 1797,483 1790,600 C1783,717 1781,850 1775,1000 C1769,1150 1760,1307 1753,1500 C1746,1693 1734,2050 1730,2160" fill="none" stroke="#35177e" stroke-width="6" stroke-dasharray="4 18"/>
+<path d="M1830,-10 C1825,42 1809,198 1800,300 C1791,402 1782,483 1775,600 C1768,717 1766,850 1760,1000 C1754,1150 1746,1307 1738,1500 C1730,1693 1719,2050 1715,2160" fill="none" stroke="#35177e" stroke-width="3"/>
+<path d="M1860,-10 C1855,42 1839,198 1830,300 C1821,402 1812,483 1805,600 C1798,717 1796,850 1790,1000 C1784,1150 1776,1307 1768,1500 C1760,1693 1749,2050 1745,2160" fill="none" stroke="#35177e" stroke-width="3"/>
+<path d="M-30,1140 C-15,1125 25,1083 60,1050 C95,1017 142,974 180,940 C218,906 258,875 290,845 C322,815 332,794 370,760 C408,726 467,678 520,640 C573,602 643,563 690,535 C737,507 760,489 800,470 C840,451 882,440 930,420 C978,400 1052,369 1090,352 C1128,335 1133,337 1160,320 C1187,303 1220,274 1250,250 C1280,226 1315,197 1340,175 C1365,153 1383,141 1400,120 C1417,99 1428,73 1440,50 C1452,27 1469,-8 1475,-20" fill="none" stroke="#f5fff9" stroke-width="62" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1385,140 C1394,152 1418,180 1440,210 C1462,240 1493,283 1520,320 C1547,357 1579,400 1600,430 C1621,460 1637,477 1645,500 C1653,523 1654,545 1648,570 C1642,595 1628,623 1610,650 C1592,677 1567,702 1540,730 C1513,758 1478,791 1450,820 C1422,849 1392,884 1370,905 C1348,926 1328,936 1315,945 C1302,954 1298,956 1295,958" fill="none" stroke="#f5fff9" stroke-width="59" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1150,335 C1152,349 1153,382 1160,420 C1167,458 1181,513 1190,560 C1199,607 1206,660 1215,700 C1224,740 1235,770 1245,800 C1255,830 1266,853 1275,880 C1284,907 1289,932 1300,960 C1311,988 1323,1015 1340,1050 C1357,1085 1382,1135 1400,1170 C1418,1205 1435,1228 1450,1260 C1465,1292 1472,1325 1490,1360 C1508,1395 1535,1426 1560,1470 C1585,1514 1596,1564 1640,1625 C1684,1686 1778,1778 1821.0,1839.0 C1864,1900 1876,1936 1901.0,1989.0 C1926,2042 1959,2131 1971.0,2159.0" fill="none" stroke="#f5fff9" stroke-width="62" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M841.0,1839.0 C851,1831 873,1814 901.0,1789.0 C929,1764 984,1717 1010,1690 C1036,1663 1028,1660 1060,1625 C1092,1590 1155,1524 1200,1480 C1245,1436 1290,1394 1330,1360 C1370,1326 1405,1300 1440,1275 C1475,1250 1496,1230 1540,1210 C1584,1190 1678,1167 1705,1158" fill="none" stroke="#f5fff9" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1578,1468 C1607,1452 1696,1400 1750,1370 C1804,1340 1848,1319 1900,1290 C1952,1261 2033,1211 2060,1195" fill="none" stroke="#f5fff9" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1870,470 C1871,498 1868,568 1878,640 C1888,712 1910,818 1930,900 C1950,982 1982,1080 2000,1130 C2018,1180 2029,1187 2035,1198" fill="none" stroke="#f5fff9" stroke-width="50" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M240,895 C245,911 255,959 270,990 C285,1021 308,1047 330,1080 C352,1113 382,1156 400,1190 C418,1224 428,1247 440,1285 C452,1323 459,1386 470,1420 C481,1454 499,1478 505,1490" fill="none" stroke="#f5fff9" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M505,1490 C524,1490 589,1480 620,1490 C651,1500 673,1535 690,1550 C707,1565 702,1554 721.0,1579.0 C740,1604 778,1667 801.0,1699.0 C824,1731 834,1736 861.0,1769.0 C888,1802 931,1854 961.0,1899.0 C991,1944 1028,2016 1041.0,2039.0" fill="none" stroke="#f5fff9" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M440,1280 C423,1282 364,1282 340,1292 C316,1302 305,1319 298,1340 C291,1361 296,1383 300,1420 C304,1457 315,1523 320,1560 C325,1597 330,1627 332,1640" fill="none" stroke="#f5fff9" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M785,1305 C804,1328 862,1398 900,1440 C938,1482 977,1525 1010,1560 C1043,1595 1085,1635 1100,1650" fill="none" stroke="#f5fff9" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1105,1240 C1126,1249 1191,1279 1230,1295 C1269,1311 1322,1331 1340,1338" fill="none" stroke="#f5fff9" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1261.0,2029.0 C1288,2004 1374,1924 1421.0,1879.0 C1468,1834 1501,1796 1541.0,1759.0 C1581,1722 1641,1676 1661.0,1659.0" fill="none" stroke="#f5fff9" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M781.0,1339.0 C798,1352 848,1389 881.0,1419.0 C914,1449 948,1486 981.0,1519.0 C1014,1552 1064,1602 1081.0,1619.0" fill="none" stroke="#f5fff9" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-30,1140 C-15,1125 25,1083 60,1050 C95,1017 142,974 180,940 C218,906 258,875 290,845 C322,815 332,794 370,760 C408,726 467,678 520,640 C573,602 643,563 690,535 C737,507 760,489 800,470 C840,451 882,440 930,420 C978,400 1052,369 1090,352 C1128,335 1133,337 1160,320 C1187,303 1220,274 1250,250 C1280,226 1315,197 1340,175 C1365,153 1383,141 1400,120 C1417,99 1428,73 1440,50 C1452,27 1469,-8 1475,-20" fill="none" stroke="#35177e" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1385,140 C1394,152 1418,180 1440,210 C1462,240 1493,283 1520,320 C1547,357 1579,400 1600,430 C1621,460 1637,477 1645,500 C1653,523 1654,545 1648,570 C1642,595 1628,623 1610,650 C1592,677 1567,702 1540,730 C1513,758 1478,791 1450,820 C1422,849 1392,884 1370,905 C1348,926 1328,936 1315,945 C1302,954 1298,956 1295,958" fill="none" stroke="#35177e" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1150,335 C1152,349 1153,382 1160,420 C1167,458 1181,513 1190,560 C1199,607 1206,660 1215,700 C1224,740 1235,770 1245,800 C1255,830 1266,853 1275,880 C1284,907 1289,932 1300,960 C1311,988 1323,1015 1340,1050 C1357,1085 1382,1135 1400,1170 C1418,1205 1435,1228 1450,1260 C1465,1292 1472,1325 1490,1360 C1508,1395 1535,1426 1560,1470 C1585,1514 1596,1564 1640,1625 C1684,1686 1778,1778 1821.0,1839.0 C1864,1900 1876,1936 1901.0,1989.0 C1926,2042 1959,2131 1971.0,2159.0" fill="none" stroke="#35177e" stroke-width="45" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M841.0,1839.0 C851,1831 873,1814 901.0,1789.0 C929,1764 984,1717 1010,1690 C1036,1663 1028,1660 1060,1625 C1092,1590 1155,1524 1200,1480 C1245,1436 1290,1394 1330,1360 C1370,1326 1405,1300 1440,1275 C1475,1250 1496,1230 1540,1210 C1584,1190 1678,1167 1705,1158" fill="none" stroke="#35177e" stroke-width="39" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1578,1468 C1607,1452 1696,1400 1750,1370 C1804,1340 1848,1319 1900,1290 C1952,1261 2033,1211 2060,1195" fill="none" stroke="#35177e" stroke-width="39" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1870,470 C1871,498 1868,568 1878,640 C1888,712 1910,818 1930,900 C1950,982 1982,1080 2000,1130 C2018,1180 2029,1187 2035,1198" fill="none" stroke="#35177e" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M240,895 C245,911 255,959 270,990 C285,1021 308,1047 330,1080 C352,1113 382,1156 400,1190 C418,1224 428,1247 440,1285 C452,1323 459,1386 470,1420 C481,1454 499,1478 505,1490" fill="none" stroke="#35177e" stroke-width="31" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M505,1490 C524,1490 589,1480 620,1490 C651,1500 673,1535 690,1550 C707,1565 702,1554 721.0,1579.0 C740,1604 778,1667 801.0,1699.0 C824,1731 834,1736 861.0,1769.0 C888,1802 931,1854 961.0,1899.0 C991,1944 1028,2016 1041.0,2039.0" fill="none" stroke="#35177e" stroke-width="31" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M440,1280 C423,1282 364,1282 340,1292 C316,1302 305,1319 298,1340 C291,1361 296,1383 300,1420 C304,1457 315,1523 320,1560 C325,1597 330,1627 332,1640" fill="none" stroke="#35177e" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M785,1305 C804,1328 862,1398 900,1440 C938,1482 977,1525 1010,1560 C1043,1595 1085,1635 1100,1650" fill="none" stroke="#35177e" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1105,1240 C1126,1249 1191,1279 1230,1295 C1269,1311 1322,1331 1340,1338" fill="none" stroke="#35177e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1261.0,2029.0 C1288,2004 1374,1924 1421.0,1879.0 C1468,1834 1501,1796 1541.0,1759.0 C1581,1722 1641,1676 1661.0,1659.0" fill="none" stroke="#35177e" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M781.0,1339.0 C798,1352 848,1389 881.0,1419.0 C914,1449 948,1486 981.0,1519.0 C1014,1552 1064,1602 1081.0,1619.0" fill="none" stroke="#35177e" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+<g id="nomi-strade" font-family="Poppins, Arial, sans-serif" font-weight="700" fill="#f5fff9" letter-spacing="1.5"><path id="p-bonara" d="M370,760 C395,740 467,678 520,640 C573,602 643,563 690,535 C737,507 760,489 800,470 C840,451 882,440 930,420 C978,400 1063,363 1090,352" fill="none"/><text font-size="27" dy="9.4"><textPath href="#p-bonara" startOffset="50%" text-anchor="middle">VIA AGOSTINO BONARA</textPath></text><path id="p-lepetit" d="M1190,560 C1199,607 1206,660 1215,700 C1224,740 1235,770 1245,800 C1255,830 1266,853 1275,880 C1284,907 1289,932 1300,960 C1311,988 1323,1015 1340,1050" fill="none"/><text font-size="23" dy="8.0"><textPath href="#p-lepetit" startOffset="50%" text-anchor="middle">CORSO ROBERTO ENEA LEPETIT</textPath></text><path id="p-tassara" d="M1395,883 L1450,820 L1513,758 L1567,702 L1610,650" fill="none"/><text font-size="24" dy="8.4"><textPath href="#p-tassara" startOffset="50%" text-anchor="middle">VIA TASSARA</textPath></text><path id="p-lorenzetti" d="M1060,1625 C1092,1590 1155,1524 1200,1480 C1245,1436 1290,1394 1330,1360" fill="none"/><text font-size="24" dy="8.4"><textPath href="#p-lorenzetti" startOffset="50%" text-anchor="middle">VIA A. LORENZETTI</textPath></text><path id="p-virgilio" d="M1590,1462 C1640,1435 1700,1399 1735,1380" fill="none"/><text font-size="21" dy="7.3"><textPath href="#p-virgilio" startOffset="50%" text-anchor="middle">VIA VIRGILIO</textPath></text><path id="p-stassano" d="M270,990 C280,1005 308,1047 330,1080 C352,1113 388,1172 400,1190" fill="none"/><text font-size="19" dy="6.6"><textPath href="#p-stassano" startOffset="50%" text-anchor="middle">VIA E. STASSANO</textPath></text><path id="p-canale" d="M1105,1240 C1126,1249 1191,1279 1230,1295 C1269,1311 1322,1331 1340,1338" fill="none"/><text font-size="14" dy="4.9"><textPath href="#p-canale" startOffset="50%" text-anchor="middle">VICOLO CANALE</textPath></text><path id="p-gleno" d="M840,1380 C857,1397 912,1450 940,1480 C968,1510 998,1547 1010,1560" fill="none"/><text font-size="14" dy="4.9"><textPath href="#p-gleno" startOffset="50%" text-anchor="middle">VICOLO GLENO</textPath></text></g><g id="luoghi"><g id="rif-comune"><circle cx="1520" cy="1100" r="19" fill="#e5405a" stroke="#f5fff9" stroke-width="6"/><circle cx="1520" cy="1100" r="6" fill="#f5fff9"/><text x="1551" y="1092" text-anchor="start" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="30" fill="#e5405a" stroke="#f5fff9" stroke-width="9" stroke-linejoin="round" paint-order="stroke">Comune</text><text x="1551" y="1126" text-anchor="start" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="30" fill="#e5405a" stroke="#f5fff9" stroke-width="9" stroke-linejoin="round" paint-order="stroke">Darfo B. T.</text></g>
+<text x="1772" y="700" text-anchor="start" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="26" fill="#35177e" stroke="#f5fff9" stroke-width="8" stroke-linejoin="round" paint-order="stroke">Stazione</text>
+
+<circle cx="580" cy="1418" r="17" fill="#6730a0" stroke="#f5fff9" stroke-width="6"/><circle cx="580" cy="1418" r="6" fill="#f5fff9"/>
+<text x="540" y="1400.0" text-anchor="end" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="32" fill="#35177e" stroke="#f5fff9" stroke-width="9" stroke-linejoin="round" paint-order="stroke">TeleBoario</text>
+<circle cx="679" cy="1835" r="19" fill="#e5405a" stroke="#f5fff9" stroke-width="6"/><circle cx="679.0" cy="1835.0" r="6" fill="#f5fff9"/>
+<text x="712" y="1832" text-anchor="start" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="30" fill="#e5405a" stroke="#f5fff9" stroke-width="9" stroke-linejoin="round" paint-order="stroke">Cinema</text>
+<text x="712" y="1868" text-anchor="start" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="30" fill="#e5405a" stroke="#f5fff9" stroke-width="9" stroke-linejoin="round" paint-order="stroke">Garden</text>
+</g>
+<g id="tappe"><g class="pin" id="pin-1" data-n="1" data-nome="Room 30" transform="translate(1536 240)" tabindex="0" role="button" aria-label="Tappa 1: Room 30"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">1</text></g></g><g class="pin" id="pin-2" data-n="2" data-nome="Odo Serramenti" transform="translate(1448 366)" tabindex="0" role="button" aria-label="Tappa 2: Odo Serramenti"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">2</text></g></g><g class="pin" id="pin-3" data-n="3" data-nome="Pescheria La Conchiglia" transform="translate(1097 437)" tabindex="0" role="button" aria-label="Tappa 3: Pescheria La Conchiglia"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">3</text></g></g><g class="pin" id="pin-4" data-n="4" data-nome="Caffè Italia" transform="translate(1580 530)" tabindex="0" role="button" aria-label="Tappa 4: Caffè Italia"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">4</text></g></g><g class="pin" id="pin-5" data-n="5" data-nome="Pianta Calzature" transform="translate(1251 590)" tabindex="0" role="button" aria-label="Tappa 5: Pianta Calzature"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">5</text></g></g><g class="pin" id="pin-6" data-n="6" data-nome="Mariella Boutique" transform="translate(1147 727)" tabindex="0" role="button" aria-label="Tappa 6: Mariella Boutique"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">6</text></g></g><g class="pin" id="pin-7" data-n="7" data-nome="Ci Si Vede Ottica" transform="translate(1366 1240)" tabindex="0" role="button" aria-label="Tappa 7: Ci Si Vede Ottica"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">7</text></g></g><g class="pin" id="pin-8" data-n="8" data-nome="Taccolini Wine Zero" transform="translate(1402 1397)" tabindex="0" role="button" aria-label="Tappa 8: Taccolini Wine Zero"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">8</text></g></g><g class="pin" id="pin-9" data-n="9" data-nome="Officina Spatti" transform="translate(1300 1500)" tabindex="0" role="button" aria-label="Tappa 9: Officina Spatti"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">9</text></g></g><g class="pin" id="pin-10" data-n="10" data-nome="Gerry Sport" transform="translate(1204 1593)" tabindex="0" role="button" aria-label="Tappa 10: Gerry Sport"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">10</text></g></g><g class="pin" id="pin-11" data-n="11" data-nome="Nonchalance Moda" transform="translate(1078 1720)" tabindex="0" role="button" aria-label="Tappa 11: Nonchalance Moda"><g class="pin-in"><circle r="34" fill="#f6da3b" stroke="#f5fff9" stroke-width="7"/><text y="12" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="36" fill="#35177e">11</text></g></g><g class="pin start" id="pin-start" data-nome="Caffè Stazione" transform="translate(1726 544)" tabindex="0" role="button" aria-label="Partenza: Caffè Stazione, ritiro calici"><g class="pin-in"><circle class="pulse" r="40" fill="none" stroke="#f6da3b" stroke-width="5"/><circle r="40" fill="#35177e" stroke="#f5fff9" stroke-width="7"/><polygon points="0.0,-30.0 7.6,-10.5 28.5,-9.3 12.4,4.0 17.6,24.3 0.0,13.0 -17.6,24.3 -12.4,4.0 -28.5,-9.3 -7.6,-10.5" fill="#f6da3b" transform="scale(.8)"/></g></g><text x="1726" y="486" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="26" fill="#35177e" stroke="#f5fff9" stroke-width="8" stroke-linejoin="round" paint-order="stroke">Caffè Stazione</text></g>
+</g>
+
+</svg>
+      </div>
+      <div class="sheet glass glass-light" id="sheet" role="dialog" aria-live="polite" aria-labelledby="sh-titolo" hidden>
+        <span class="grab" aria-hidden="true"></span>
+        <button class="chiudi" id="chiudi" type="button" aria-label="Chiudi la scheda">×</button>
+        <div class="n" id="sh-n"></div>
+        <h3 id="sh-titolo"></h3>
+        <div id="sh-corpo"></div>
+        <div class="nav"><button type="button" id="prec" aria-label="Tappa precedente">‹</button><button type="button" id="succ" aria-label="Tappa successiva">›</button></div>
+      </div>
+    </div>
+    <div class="legenda" aria-hidden="true">
+      <span><i style="background:#f6da3b;border:2px solid #fff"></i>Tappe</span>
+      <span><i style="background:#35177e;border:2px solid #fff"></i>Partenza</span>
+      <span><i style="background:#e5405a"></i>Punti di riferimento</span>
+    </div>
+  </div>
+</section>
+
+<section class="elenco" id="elenco">
+  <div class="wrap">
+    <h2>Le tappe</h2>
+    <div id="lista"></div>
+  </div>
+</section>
+
+<section class="funziona">
+  <div class="wrap">
+    <h2>Come funziona</h2>
+    <div class="glass blocco"><img class="pg" src="illustrazione-affinamente.svg" alt="" aria-hidden="true" width="738" height="1244"><ol class="passi">
+      <li><b aria-hidden="true">1</b><div><h3>Ritira il kit</h3><p>Al Caffè Stazione, dalle 16.00: sacchetta portacalice, calice in vetro (resta tuo come ricordo) e tessera coupon.</p></div></li>
+      <li><b aria-hidden="true">2</b><div><h3>Fai il giro</h3><p>In ogni tappa ti timbrano la tessera e assaggi un calice con il suo abbinamento. Una sola degustazione per tappa.</p></div></li>
+      <li><b aria-hidden="true">3</b><div><h3>Scopri il centro</h3><p>Timbro dopo timbro, il centro di Corna si fa scoprire passo dopo passo.</p></div></li>
+    </ol></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="firma">Proloco di Darfo</div>
+    <p><a href="tel:+393661947273">+39 366 194 7273</a><br><a href="mailto:prolocodarfoboarioterme@gmail.com">prolocodarfoboarioterme@gmail.com</a><br><a href="https://www.instagram.com/prolocodarfo/" target="_blank" rel="noopener">Instagram @prolocodarfo</a></p>
+    <p>In collaborazione con l'associazione dei commercianti.</p>
+    <p>Partner del percorso: pescheria La Conchiglia, Corna.</p>
+    <p class="piccolo">Con il patrocinio del Comune di Darfo Boario Terme</p>
+  </div>
+</footer>
+
+<script>
+/* DATI DELLE TAPPE: per cambiare vino o stuzzichino si modifica solo qui. */
+var TAPPE=[
+ {
+  "n": 1,
+  "nome": "Room 30",
+  "stuz": "Salume nostrano [nome da definire]",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 2,
+  "nome": "Odo Serramenti",
+  "stuz": "Formaggio nostrano [nome da definire]",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 3,
+  "nome": "Pescheria La Conchiglia",
+  "stuz": "Crudité di tonno rosso del Mediterraneo e melograno",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 4,
+  "nome": "Caffè Italia",
+  "stuz": "Schiacciatina con mousse di baccalà aromatizzato alla menta e scaglie di mandorle",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 5,
+  "nome": "Pianta Calzature",
+  "stuz": "Monoporzione di riso Venere con gambero Viola di Sicilia",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 6,
+  "nome": "Mariella Boutique",
+  "stuz": "Crostone con farina di polenta e ragù di piovra 2.0",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 7,
+  "nome": "Ci Si Vede Ottica",
+  "stuz": "Salume nostrano [nome da definire]",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 8,
+  "nome": "Taccolini Wine Zero",
+  "stuz": "Lobster roll",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 9,
+  "nome": "Officina Spatti",
+  "stuz": "Formaggio nostrano [nome da definire]",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 10,
+  "nome": "Gerry Sport",
+  "stuz": "Panettone [gusto da definire]",
+  "vino": "[Nome del vino]"
+ },
+ {
+  "n": 11,
+  "nome": "Nonchalance Moda",
+  "stuz": "[stuzzichino da definire]",
+  "vino": "[Nome del vino]"
+ }
+];
+var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 ritiri il kit: sacchetta portacalice, calice in vetro (resta tuo come ricordo) e tessera coupon.'};
+
+(function(){
+  var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sheet=document.getElementById('sheet'),nEl=document.getElementById('sh-n'),tEl=document.getElementById('sh-titolo'),cEl=document.getElementById('sh-corpo');
+  var scroller=document.getElementById('mapscroll'),pins=document.querySelectorAll('#mappa-svg .pin'),lastFocus=null,current=null;
+
+  function esc(t){return String(t).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function ph(t){return /\[.*\]/.test(t)?'<span class="ph">'+esc(t)+'</span>':esc(t);}
+  function rows(t){return '<dl><dt>Vino</dt><dd>'+ph(t.vino)+'</dd><dt>Assaggio</dt><dd>'+ph(t.stuz)+'</dd></dl>';}
+
+  function centerPin(el){
+    var r=el.getBoundingClientRect(),c=scroller.getBoundingClientRect();
+    var x=r.left-c.left+scroller.scrollLeft+r.width/2,y=r.top-c.top+scroller.scrollTop+r.height/2;
+    scroller.scrollTo({left:x-scroller.clientWidth/2,top:y-scroller.clientHeight*0.30,behavior:reduced?'auto':'smooth'});
+  }
+  function mark(key){pins.forEach(function(p){p.classList.toggle('sel',String(p.dataset.n||'start')===String(key));});}
+
+  function buzz(){try{if(navigator.vibrate)navigator.vibrate(12);}catch(e){}}
+  var ORDINE=['start',1,2,3,4,5,6,7,8,9,10,11];
+  function vai(d){var i=ORDINE.indexOf(current)+d;if(i<0||i>=ORDINE.length)return;buzz();swap(d,function(){openSheet(ORDINE[i],{noCenter:true});});}
+  function swap(d,fn){sheet.style.setProperty('--dir',d>0?-1:1);sheet.classList.add('swap');setTimeout(function(){fn();requestAnimationFrame(function(){sheet.classList.remove('swap');});},140);}
+  function openSheet(key,opts){
+    opts=opts||{};
+    var el=document.getElementById(key==='start'?'pin-start':'pin-'+key);
+    var mb=document.querySelector('.mapbox').getBoundingClientRect(),pr=el.getBoundingClientRect();
+    sheet.classList.toggle('top',(pr.top+pr.height/2-mb.top)>mb.height*0.5);
+    if(key==='start'){nEl.textContent='Partenza';tEl.textContent=START.nome;cEl.innerHTML='<p>'+esc(START.testo)+'</p>';}
+    else{var t=TAPPE[key-1];nEl.textContent='Tappa '+t.n+' di '+TAPPE.length;tEl.textContent=t.nome;cEl.innerHTML=rows(t);}
+    sheet.hidden=false;requestAnimationFrame(function(){sheet.classList.add('open');});
+    mark(key);current=key;
+    var i=ORDINE.indexOf(key);document.getElementById('prec').disabled=i<=0;document.getElementById('succ').disabled=i>=ORDINE.length-1;
+  }
+  function closeSheet(){
+    sheet.classList.remove('open');mark(null);current=null;
+    setTimeout(function(){if(!sheet.classList.contains('open'))sheet.hidden=true;},380);
+    if(lastFocus&&lastFocus.focus)lastFocus.focus({preventScroll:true});
+  }
+  pins.forEach(function(p){
+    var key=p.id==='pin-start'?'start':p.dataset.n;
+    function go(e){lastFocus=p;buzz();openSheet(key);}
+    p.addEventListener('click',go);
+    p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+  });
+  document.getElementById('chiudi').addEventListener('click',closeSheet);
+  document.getElementById('prec').addEventListener('click',function(){vai(-1);});
+  document.getElementById('succ').addEventListener('click',function(){vai(1);});
+  // Swipe sulla scheda: giù (o su, se è in alto) chiude; sinistra/destra cambia tappa
+  var drag=null;
+  sheet.addEventListener('pointerdown',function(e){if(e.target.closest('button'))return;drag={x:e.clientX,y:e.clientY,dx:0,dy:0};try{sheet.setPointerCapture(e.pointerId);}catch(_){}sheet.style.transition='none';});
+  sheet.addEventListener('pointermove',function(e){if(!drag)return;drag.dx=e.clientX-drag.x;drag.dy=e.clientY-drag.y;var up=sheet.classList.contains('top');
+    if(Math.abs(drag.dx)>Math.abs(drag.dy))sheet.style.transform='translateX('+drag.dx*0.35+'px)';else sheet.style.transform='translateY('+(up?Math.min(0,drag.dy):Math.max(0,drag.dy))+'px)';});
+  function fine(){if(!drag)return;var d=drag;drag=null;sheet.style.transition='';sheet.style.transform='';var up=sheet.classList.contains('top');
+    if(Math.abs(d.dx)>60&&Math.abs(d.dx)>Math.abs(d.dy)){vai(d.dx<0?1:-1);}else if((up?-d.dy:d.dy)>50){buzz();closeSheet();}}
+  sheet.addEventListener('pointerup',fine);sheet.addEventListener('pointercancel',fine);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&current!==null)closeSheet();});
+  scroller.addEventListener('click',function(e){if(current!==null&&!e.target.closest('.pin'))closeSheet();});
+
+  // Elenco compatto: tessere a due colonne
+  var lista=document.getElementById('lista'),h='<div class="tiles">';
+  h+='<div class="tile start glass glass-light"><b aria-hidden="true">★</b>Partenza · '+esc(START.nome)+'</div>';
+  TAPPE.forEach(function(t){h+='<button class="tile glass glass-light" type="button" data-k="'+t.n+'"><b aria-hidden="true">'+t.n+'</b>'+esc(t.nome)+'</button>';});
+  lista.innerHTML=h+'</div>';
+  lista.addEventListener('click',function(e){
+    var b=e.target.closest('.tile[data-k]');if(!b)return;buzz();
+    document.getElementById('mappa').scrollIntoView({behavior:reduced?'auto':'smooth'});
+    setTimeout(function(){openSheet(+b.dataset.k);},reduced?0:450);
+  });
+
+  // Vetro che brilla dove tocchi
+  function shine(e){var g=e.target.closest&&e.target.closest('.glass');if(!g)return;var r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');g.classList.add('shine');clearTimeout(g._s);g._s=setTimeout(function(){g.classList.remove('shine');},700);}
+  if(!reduced){document.addEventListener('pointerdown',shine,{passive:true});document.addEventListener('pointermove',function(e){if(e.pressure>0||e.pointerType==='mouse')shine(e);},{passive:true});}
+})();
+</script>
+</body>
+</html>
