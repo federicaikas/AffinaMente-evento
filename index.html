@@ -67,7 +67,7 @@ section{padding:18px 0}
 .hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 0 calc(50% - min(50vw,240px));pointer-events:none}
 .hero .badge{margin-top:0}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
-.logo{display:block;width:min(74%,330px);height:auto;margin:12px auto 4px}
+.logo{display:block;width:min(82%,380px);height:auto;margin:26px auto 4px}
 .data{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(17px,5vw,21px);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap}
 .mappa .sub{margin:4px 0 14px;font-size:18px}
 .calice{flex:none;width:38px;height:auto;overflow:visible}
@@ -178,7 +178,7 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 
 
 /* Invito a scorrere */
-.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:6px;padding:0 15px 0 17px;height:38px;border-radius:99px;border:1.5px solid #fff;background:var(--giallo);color:var(--viola);font:800 15px var(--display);-webkit-text-stroke:.4px currentColor;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
+.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:6px;padding:0 15px 0 17px;height:42px;border-radius:99px;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.06)),rgba(45,27,120,.82);font:800 16px var(--display);-webkit-text-stroke:.4px currentColor;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
 .scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:salta 2s 1s ease-in-out infinite}
 .scendi svg{width:16px;height:16px}
 @keyframes salta{0%,52%,100%{transform:translate(-50%,0)}12%{transform:translate(-50%,-9px)}24%{transform:translate(-50%,0)}33%{transform:translate(-50%,-4px)}41%{transform:translate(-50%,0)}}
@@ -211,7 +211,6 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 <header class="hero">
   <div class="wrap">
     <video class="hero-video" src="hero.mp4" poster="hero-poster.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" width="480" height="524"></video>
-    <span class="badge glass">7ª edizione</span>
     <img class="logo" src="logo-affinamente.svg" alt="AFFINAMENTE 2026" width="962" height="347">
     <p class="data">Domenica 6 dicembre</p>
   </div>
@@ -388,7 +387,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 
 </main>
 
-<button type="button" class="scendi" id="scendi" aria-label="Scorri fino alla mappa">Scopri la mappa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+<button type="button" class="scendi glass" id="scendi" aria-label="Scorri fino alla mappa">Scopri la mappa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
 <div class="festa" id="festa" role="dialog" aria-modal="true" aria-labelledby="festa-t" hidden>
   <div class="coriandoli" id="coriandoli" aria-hidden="true"></div>
   <div class="festa-in glass glass-light">
