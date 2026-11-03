@@ -178,11 +178,11 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 
 
 /* Invito a scorrere */
-.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:8px;padding:0 20px 0 22px;height:48px;border-radius:99px;border:2px solid #fff;background:var(--giallo);color:var(--viola);font:700 17px var(--display);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
-.scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.scendi svg{width:20px;height:20px;animation:rimbalza 1.4s ease-in-out infinite}
-@keyframes rimbalza{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
-@media (prefers-reduced-motion:reduce){.scendi svg{animation:none}.scendi{transition:none}}
+.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:8px;padding:0 20px 0 22px;height:48px;border-radius:99px;border:2px solid #fff;background:var(--giallo);color:var(--viola);font:800 18px var(--display);-webkit-text-stroke:.5px currentColor;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
+.scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:salta 2s 1s ease-in-out infinite}
+.scendi svg{width:20px;height:20px}
+@keyframes salta{0%,52%,100%{transform:translate(-50%,0)}12%{transform:translate(-50%,-16px)}24%{transform:translate(-50%,0)}33%{transform:translate(-50%,-8px)}41%{transform:translate(-50%,0)}}
+@media (prefers-reduced-motion:reduce){.scendi.on{animation:none}.scendi{transition:none}}
 /* Aiuto + footer */
 .aiuto .glass{padding:20px 18px}
 .aiuto h2{margin-bottom:10px}
