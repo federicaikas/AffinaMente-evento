@@ -63,7 +63,7 @@ section{padding:18px 0}
 @media (prefers-reduced-transparency:reduce){.glass{background:rgba(70,45,150,.96);-webkit-backdrop-filter:none;backdrop-filter:none}.glass-light{background:#fff}}
 
 /* Hero */
-.hero{text-align:center;padding:0 0 14px}
+.hero{text-align:center;padding:0 0 26px}
 .hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 0 calc(50% - min(50vw,240px));pointer-events:none}
 .hero .badge{margin-top:0}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
@@ -177,10 +177,19 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 
 
 
+
+/* Alone di luce che segue il dito */
+.alone{position:fixed;inset:0;z-index:30;mix-blend-mode:screen;pointer-events:none;opacity:0;transition:opacity .7s ease;
+  background:radial-gradient(240px circle at var(--gx,50%) var(--gy,50%),rgba(150,110,255,.55),rgba(110,75,255,.22) 42%,rgba(120,85,255,0) 72%)}
+.alone.on{opacity:1;transition:opacity .15s}
+.tocco{position:fixed;left:0;top:0;z-index:60;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;pointer-events:none;border:2px solid rgba(215,200,255,.9);box-shadow:0 0 18px rgba(170,135,255,.8);opacity:0;transform:scale(.3)}
+.tocco.vai{animation:tocco .55s ease-out}
+@keyframes tocco{0%{opacity:.9;transform:translate(var(--tx),var(--ty)) scale(.3)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(1.5)}}
+@media (prefers-reduced-motion:reduce){.alone,.tocco{display:none}}
 /* Invito a scorrere */
-.scendi{white-space:nowrap;position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:6px;padding:0 15px 0 17px;height:42px;border-radius:99px;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.06)),rgba(45,27,120,.82);font:800 16px var(--display);-webkit-text-stroke:.4px currentColor;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
+.scendi{white-space:nowrap;position:fixed;left:50%;bottom:var(--b,calc(12px + env(safe-area-inset-bottom)));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;display:flex;align-items:center;gap:6px;padding:0 20px 0 23px;height:48px;border-radius:99px;color:#fff;background:linear-gradient(170deg,rgba(255,255,255,.50) 0%,rgba(255,255,255,.14) 36%,rgba(255,255,255,0) 54%),linear-gradient(135deg,rgba(150,110,255,.94),rgba(104,56,236,.94));border:1.5px solid rgba(255,255,255,.75);box-shadow:inset 0 2px 0 rgba(255,255,255,.85),inset 0 -4px 10px rgba(46,18,150,.5),inset 0 0 20px rgba(200,180,255,.38),0 10px 28px rgba(40,15,150,.55),0 0 24px rgba(150,110,255,.5);-webkit-backdrop-filter:blur(26px) saturate(2.3);backdrop-filter:blur(26px) saturate(2.3);font:800 18px var(--display);-webkit-text-stroke:.4px currentColor;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 22px rgba(15,8,60,.45)}
 .scendi.on{opacity:1;transform:translate(-50%,0);pointer-events:auto;animation:salta 2s 1s ease-in-out infinite}
-.scendi svg{width:16px;height:16px}
+.scendi svg{width:18px;height:18px}
 @keyframes salta{0%,52%,100%{transform:translate(-50%,0)}12%{transform:translate(-50%,-9px)}24%{transform:translate(-50%,0)}33%{transform:translate(-50%,-4px)}41%{transform:translate(-50%,0)}}
 @media (prefers-reduced-motion:reduce){.scendi.on{animation:none}.scendi{transition:none}}
 /* Aiuto + footer */
@@ -388,6 +397,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 </main>
 
 <button type="button" class="scendi glass" id="scendi" aria-label="Scorri fino alla mappa">Scopri la mappa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg></button>
+<div class="alone" id="alone" aria-hidden="true"></div><div class="tocco" id="tocco" aria-hidden="true"></div>
 <div class="festa" id="festa" role="dialog" aria-modal="true" aria-labelledby="festa-t" hidden>
   <div class="coriandoli" id="coriandoli" aria-hidden="true"></div>
   <div class="festa-in glass glass-light">
@@ -771,13 +781,18 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 (function(){
   var b=document.getElementById('scendi'),m=document.getElementById('mappa');if(!b||!m)return;
   var chiuso=false;
+  var mb=document.querySelector('.mapbox')||m;
   function aggiorna(){
     var r=m.getBoundingClientRect(),vh=window.innerHeight;
+    // il pulsante sta a cavallo del bordo alto della mappa che si intravede; altrimenti in basso
+    var mt=mb.getBoundingClientRect().top,h=b.offsetHeight||48,minB=12+(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0);
+    var bott=mt<vh?Math.max(minB,vh-mt-h/2):minB;
+    b.style.setProperty('--b',bott+'px');
     // visibile finché la mappa non è ben dentro lo schermo
     var lontana=r.top>vh*0.62&&window.scrollY<m.offsetTop-40;
     // niente sovrapposizione col logo: se il pulsante cadrebbe sopra logo/data, resta nascosto
     var lg=document.querySelector('.data');
-    var top=vh-(parseFloat(getComputedStyle(b).bottom)||12)-b.offsetHeight-10;
+    var top=vh-bott-h-10;
     var libero=!lg||top>=lg.getBoundingClientRect().bottom-4||window.scrollY>40;
     b.classList.toggle('on',lontana&&!chiuso&&libero);
   }
@@ -790,6 +805,15 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   function vhPx(){return window.innerHeight}
   window.addEventListener('resize',aggiorna);
   setTimeout(aggiorna,600);
+})();
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  var a=document.getElementById('alone'),t=document.getElementById('tocco'),off=0;
+  function muovi(x,y){a.style.setProperty('--gx',x+'px');a.style.setProperty('--gy',y+'px');a.classList.add('on');clearTimeout(off);off=setTimeout(function(){a.classList.remove('on');},900);}
+  document.addEventListener('touchstart',function(e){var p=e.touches[0];muovi(p.clientX,p.clientY);t.style.setProperty('--tx',p.clientX+'px');t.style.setProperty('--ty',p.clientY+'px');t.classList.remove('vai');void t.offsetWidth;t.classList.add('vai');},{passive:true});
+  document.addEventListener('touchmove',function(e){var p=e.touches[0];muovi(p.clientX,p.clientY);},{passive:true});
+  document.addEventListener('touchend',function(){clearTimeout(off);off=setTimeout(function(){a.classList.remove('on');},350);},{passive:true});
+  document.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')muovi(e.clientX,e.clientY);},{passive:true});
 })();
 if(matchMedia('(prefers-reduced-motion:reduce)').matches){const v=document.querySelector('.hero-video');if(v){v.removeAttribute('autoplay');v.pause()}}
 </script>
