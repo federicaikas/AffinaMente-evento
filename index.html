@@ -111,6 +111,8 @@ footer .azzera{margin:14px 0 0}
 footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 12.5px var(--testo);text-decoration:underline;cursor:pointer;min-height:44px;padding:0 10px}
 .pin.sel circle{fill:#35177e}
 .pin.sel text{fill:#f6da3b}
+.pin .spunta{display:none}
+.pin.fatta .spunta{display:inline}
 .pin.sel.fatta circle{fill:#aef9ff}
 .pin.sel.fatta text{fill:#35177e}
 #mappa-svg polygon.acceso.fatta{fill:#aef9ff;filter:drop-shadow(0 0 22px rgba(174,249,255,1))}
@@ -494,6 +496,9 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   Object.keys(pins).forEach(function(k){
     if(k==='start')return;var p=pins[k],tx=p.querySelector('text');
     if(tx)tx.textContent='';p.setAttribute('aria-label',p.dataset.nome);
+    var pn=document.createElementNS('http://www.w3.org/2000/svg','path');pn.setAttribute('class','spunta');pn.setAttribute('d','M-13 1.500L-4 10.500L14 -9');
+    pn.setAttribute('fill','none');pn.setAttribute('stroke','#35177e');pn.setAttribute('stroke-width','7.500');pn.setAttribute('stroke-linecap','round');pn.setAttribute('stroke-linejoin','round');
+    p.querySelector('.pin-in').appendChild(pn);
   });
   var ORDINE=[];TAPPE.forEach(function(t){ORDINE.push(t.n);});
   var FULL=[640,120,1260,1800],W0=760,WMIN=260,WMAX=2500,cur=-1,vb=FULL.slice(),anim=0,ready=false,userMoved=false;
@@ -530,10 +535,10 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
       var f=!!fatte[t.n];if(f)n++;
       var c=cards[ORDINE.indexOf(t.n)];c.classList.toggle('fatta',f);
       var b=c.querySelector('.ok');b.setAttribute('aria-pressed',String(f));b.setAttribute('aria-label',f?'Tappa assaggiata, tocca per togliere la spunta':'Segna come assaggiata');
-      if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);var tx=pins[t.n].querySelector('text');if(tx)tx.textContent=f?'\u2713':'';}
+      if(pins[t.n]){pins[t.n].classList.toggle('fatta',f);}
       if(edif[t.n])edif[t.n].classList.toggle('fatta',f);
     });
-    cont.hidden=n===0;cont.textContent=n===TAPPE.length?'Giro completato \u2713':n+' su '+TAPPE.length+' tappe';
+    cont.hidden=n===0;cont.textContent=n===TAPPE.length?'Giro completato':n+' su '+TAPPE.length+' tappe';
     azz.hidden=n===0;
   }
 
