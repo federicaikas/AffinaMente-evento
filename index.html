@@ -141,15 +141,14 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .card .nav svg{width:20px;height:20px}
 .card h3{padding-top:0;font-size:30px;font-weight:700;-webkit-text-stroke:.5px currentColor;margin:0;line-height:1;flex:1;min-width:0;text-transform:uppercase;letter-spacing:.02em}
 .card.start .top{margin-bottom:6px}
-.card .vino{display:grid;grid-template-columns:20px 1fr;column-gap:10px;align-items:stretch;margin:0}
-.card .ic{position:relative}
-.card .ic svg{position:absolute;inset:0;width:100%;height:100%}
-.card .vino b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
-.card .vino i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola);margin-top:1px}
-.card .abb{margin:10px 0 2px;font-weight:400;font-size:14px;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:var(--viola);opacity:1}
-.card .piatto{margin:0;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
 .card p{margin:0;font-size:16px;line-height:1.35}
 .card.start h3{color:var(--viola)}
+.card .blk{display:grid;grid-template-columns:24px 1fr;column-gap:8px;align-items:start}
+.card .blk .ic{position:relative;height:40px}
+.card .blk .ic svg{position:absolute;inset:0;width:100%;height:100%}
+.card .blk i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola);margin-bottom:1px}
+.card .blk b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
+.card .cibo{margin-top:12px}
 .card .ph{color:var(--viola);opacity:1}
 .ph{font-style:normal;border-bottom:1px dashed currentColor;opacity:.85}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
@@ -395,6 +394,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 /* DATI DELLE TAPPE: per cambiare vino o stuzzichino si modifica solo qui. */
 var TAPPE=[
  {
+  "tipo": "salume",
   "n": 1,
   "nome": "Room 30",
   "stuz": "Salume nostrano",
@@ -402,6 +402,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "formaggio",
   "n": 2,
   "nome": "Odo Serramenti",
   "stuz": "Formaggio nostrano",
@@ -409,6 +410,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "pesce",
   "n": 3,
   "nome": "Pescheria La Conchiglia",
   "stuz": "Crudité di tonno rosso del Mediterraneo e melograno",
@@ -416,6 +418,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "pesce",
   "n": 4,
   "nome": "Caffè Italia",
   "stuz": "Schiacciatina con mousse di baccalà aromatizzato alla menta e scaglie di mandorle",
@@ -423,6 +426,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "pesce",
   "n": 5,
   "nome": "Pianta Calzature",
   "stuz": "Monoporzione di riso Venere con gambero Viola di Sicilia",
@@ -430,6 +434,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "pesce",
   "n": 6,
   "nome": "Mariella Boutique",
   "stuz": "Crostone con farina di polenta e ragù di piovra 2.0",
@@ -437,6 +442,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "salume",
   "n": 7,
   "nome": "Ci Si Vede Ottica",
   "stuz": "Salume nostrano",
@@ -444,6 +450,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "pesce",
   "n": 8,
   "nome": "Taccolini Wine Zero",
   "stuz": "Lobster roll",
@@ -451,6 +458,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "formaggio",
   "n": 9,
   "nome": "Officina Spatti",
   "stuz": "Formaggio nostrano",
@@ -458,6 +466,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "panettone",
   "n": 10,
   "nome": "Gerry Sport",
   "stuz": "Panettone [gusto da definire]",
@@ -465,6 +474,7 @@ var TAPPE=[
   "cantina": "Berlucchi"
  },
  {
+  "tipo": "generico",
   "n": 11,
   "nome": "Nonchalance Moda",
   "stuz": "[stuzzichino da definire]",
@@ -492,10 +502,18 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
 
   // ----- Card -----
   var UP='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4l-6 6 6 6"/></svg>',DOWN='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>';
+  var A='<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var ICONE={
+    salume:A+'<rect x="1.500" y="7.500" width="19" height="10" rx="5" transform="rotate(-18 11 12.500)"/><path d="M20 6.500c.8-1.800 2.500-2 3-.5"/><circle cx="9" cy="13.500" r=".6" fill="currentColor"/><circle cx="13" cy="12" r=".6" fill="currentColor"/><circle cx="16" cy="10.500" r=".6" fill="currentColor"/></svg>',
+    formaggio:A+'<path d="M2.500 18V11L21.500 6.500V18Z"/><circle cx="8" cy="14.500" r="1.200"/><circle cx="14" cy="12.500" r="1"/><circle cx="17.500" cy="15" r="1.300"/></svg>',
+    pesce:A+'<path d="M2.500 12c3-5 9.500-6 13.500-3L21.500 6v12L16 15c-4 3-10.500 2-13.500-3Z"/><circle cx="7.500" cy="11.500" r=".7" fill="currentColor"/></svg>',
+    panettone:A+'<path d="M4.500 21v-9c0-4.200 3.200-7 7.500-7s7.500 2.800 7.500 7v9Z"/><path d="M4.500 16.500h15"/><path d="M12 5V3"/></svg>',
+    generico:A+'<path d="M5.500 3v5a2.500 2.500 0 0 0 5 0V3M8 11v10"/><path d="M16.500 21V3c-2.500 1.500-3.500 5-3.500 8h3.500"/></svg>'
+  };
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
-    {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><b>'+esc(t.vino)+'</b><i>'+esc(t.cantina)+'</i></span></div><p class="abb">in abbinamento con</p><p class="piatto">'+ph(t.stuz)+'</p><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
+    {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="blk vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><i>'+esc(t.cantina)+'</i><b>'+esc(t.vino)+'</b></span></div><div class="blk cibo"><span class="ic">'+ICONE[t.tipo||'generico']+'</span><span><i>in abbinamento con</i><b>'+ph(t.stuz)+'</b></span></div><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
