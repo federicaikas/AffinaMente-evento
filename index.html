@@ -63,9 +63,11 @@ section{padding:18px 0}
 @media (prefers-reduced-transparency:reduce){.glass{background:rgba(70,45,150,.96);-webkit-backdrop-filter:none;backdrop-filter:none}.glass-light{background:#fff}}
 
 /* Hero */
-.hero{text-align:center;padding:30px 0 4px}
+.hero{text-align:center;padding:6px 0 4px}
+.hero-video{display:block;width:min(74%,300px);height:auto;aspect-ratio:480/524;margin:0 auto -6px;-webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,#000 72%,transparent 100%);pointer-events:none}
+.hero .badge{margin-top:0}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
-.logo{display:block;width:min(82%,380px);height:auto;margin:34px auto 8px}
+.logo{display:block;width:min(82%,380px);height:auto;margin:24px auto 8px}
 .data{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(17px,5vw,21px);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap}
 .mappa .sub{margin:4px 0 14px;font-size:18px}
 .calice{flex:none;width:38px;height:auto;overflow:visible}
@@ -213,6 +215,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 
 <header class="hero">
   <div class="wrap">
+    <video class="hero-video" src="hero.mp4" poster="hero-poster.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" width="480" height="524"></video>
     <span class="badge glass">7ª edizione</span>
     <img class="logo" src="logo-affinamente.svg" alt="AFFINAMENTE 2026" width="962" height="347">
     <p class="data">Domenica 6 dicembre</p>
@@ -762,6 +765,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   function shine(e){var g=e.target.closest&&e.target.closest('.glass');if(!g)return;var r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px');g.classList.add('shine');clearTimeout(g._s);g._s=setTimeout(function(){g.classList.remove('shine');},700);}
   if(!reduced){document.addEventListener('pointerdown',shine,{passive:true});document.addEventListener('pointermove',function(e){if(e.pressure>0||e.pointerType==='mouse')shine(e);},{passive:true});}
 })();
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){const v=document.querySelector('.hero-video');if(v){v.removeAttribute('autoplay');v.pause()}}
 </script>
 </body>
 </html>
