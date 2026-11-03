@@ -149,6 +149,7 @@ footer .azzera button{background:none;border:0;color:#fff;opacity:.75;font:400 1
 .card .blk i{display:block;font-style:normal;font-weight:700;font-size:15px;line-height:1.2;letter-spacing:.1em;text-transform:uppercase;color:var(--viola);margin-bottom:1px}
 .card .blk b{display:block;font-weight:400;font-size:19px;line-height:1.15;letter-spacing:.01em;color:var(--viola)}
 .card .cibo{margin-top:12px}
+.card .cibo .ic{height:24px}
 .card .ph{color:var(--viola);opacity:1}
 .ph{font-style:normal;border-bottom:1px dashed currentColor;opacity:.85}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin:6px 4px 0;opacity:.95}
@@ -513,7 +514,7 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   var h='';
   ORDINE.forEach(function(k,i){
     var nav='<div class="nav"><button type="button" data-d="-1" aria-label="Tappa precedente"'+(i===0?' disabled':'')+'>'+UP+'</button><button type="button" data-d="1" aria-label="Tappa successiva"'+(i===ORDINE.length-1?' disabled':'')+'>'+DOWN+'</button></div>';
-    {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="blk vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><i>'+esc(t.cantina)+'</i><b>'+esc(t.vino)+'</b></span></div><div class="blk cibo"><span class="ic">'+ICONE[t.tipo||'generico']+'</span><span><i>in abbinamento con</i><b>'+ph(t.stuz)+'</b></span></div><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
+    {var t=TAPPE[k-1];h+='<article class="card glass glass-light" role="listitem" data-i="'+i+'"><div class="top"><h3>'+esc(t.nome)+'</h3></div><div class="blk vino"><span class="ic"><svg viewBox="0 0 20 40" preserveAspectRatio="xMidYMid meet" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.500 2h13c.7 9-1.800 16.500-6.500 18C5.300 18.500 2.800 11 3.500 2Z"/><path d="M10 20v16M5.500 38h9"/></svg></span><span><i>'+esc(t.cantina)+'</i><b>'+esc(t.vino)+'</b></span></div><div class="blk cibo"><span class="ic">'+ICONE[t.tipo||'generico']+'</span><span><b>'+ph(t.stuz)+'</b></span></div><div class="foot"><button type="button" class="ok" data-ok="'+t.n+'" aria-pressed="false" aria-label="Segna come assaggiata"><span class="cb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'+nav+'</div></article>';}
   });
   car.innerHTML=h;
   var cards=car.querySelectorAll('.card');
