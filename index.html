@@ -65,7 +65,13 @@ section{padding:18px 0}
 /* Hero */
 .hero{text-align:center;padding:0 0 26px}
 .hero-video{display:block;position:relative;width:min(100vw,480px);height:auto;aspect-ratio:480/524;margin:0 0 0 calc(50% - min(50vw,240px));pointer-events:none}
-.hero .badge{margin-top:0}
+.hv{overflow:hidden;transition:height .95s cubic-bezier(.65,0,.25,1)}
+.hv .hero-video{transform-origin:50% 0;transition:transform .95s cubic-bezier(.65,0,.25,1),opacity .7s ease}
+.hv.chiuso{height:0!important}
+.hv.chiuso .hero-video{transform:scaleY(.25);opacity:0}
+.hero{transition:padding-top .95s cubic-bezier(.65,0,.25,1)}
+.hero.sopra{padding-top:30px}
+@media (prefers-reduced-motion:reduce){.hv,.hv .hero-video,.hero{transition:none}}
 .badge{display:inline-block;white-space:nowrap;padding:6px 16px;border-radius:99px;font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
 .logo{display:block;width:min(82%,380px);height:auto;margin:26px auto 4px}
 .data{margin:2px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(17px,5vw,21px);letter-spacing:.12em;text-transform:uppercase;color:#fff;white-space:nowrap}
@@ -238,7 +244,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
 
 <header class="hero">
   <div class="wrap">
-    <video class="hero-video" src="hero.mp4" poster="hero-poster.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" width="480" height="524"></video>
+    <div class="hv" id="hv"><video class="hero-video" src="hero.mp4" poster="hero-poster.jpg" autoplay muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1" width="480" height="524"></video></div>
     <img class="logo" src="logo-affinamente.svg" alt="AFFINAMENTE 2026" width="962" height="347">
     <p class="data">Domenica 6 dicembre</p>
   </div>
@@ -430,7 +436,7 @@ footer .piccolo{max-width:44ch;text-wrap:balance;margin:0 auto;font-size:12px;li
   <div class="wrap">
     <p class="chiedi">Ti è piaciuta la giornata?</p>
     <p class="cta">Scatta la tua foto e taggaci su Instagram<br><a href="https://www.instagram.com/prolocodarfoboarioterme/" target="_blank" rel="noopener">@prolocodarfoboarioterme</a></p>
-    <p class="piccolo">AFFINAMENTE è un evento organizzato dalla Proloco di Darfo in collaborazione con l'Associazione dei Commercianti della Cittadella e con il patrocinio del Comune di Darfo Boario Terme.</p>
+    <p class="piccolo">AFFINAMENTE è un evento organizzato dalla Proloco di Darfo in collaborazione con l'Associazione dei Commercianti della Cittadella.</p>
     <p class="azzera" id="azzera-box" hidden><button type="button" id="azzera">Azzera le tappe segnate</button></p>
     <p class="contatti"><a href="tel:+393661947273">+39 366 194 7273</a><br><a href="mailto:prolocodarfoboarioterme@gmail.com">prolocodarfoboarioterme@gmail.com</a></p>
   </div>
@@ -834,7 +840,29 @@ var START={nome:'Caffè Stazione',testo:'Qui inizia il percorso. Dalle 16.00 rit
   document.addEventListener('touchend',function(){clearTimeout(off);off=setTimeout(function(){a.classList.remove('on');},350);},{passive:true});
   document.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')muovi(e.clientX,e.clientY);},{passive:true});
 })();
-if(matchMedia('(prefers-reduced-motion:reduce)').matches){const v=document.querySelector('.hero-video');if(v){v.removeAttribute('autoplay');v.pause()}}
+(function(){
+  var hv=document.getElementById('hv'),v=hv&&hv.querySelector('video'),hero=document.querySelector('.hero');if(!hv||!v)return;
+  var fatto=false,rid=0;
+  function segui(fine){ // tiene allineati pulsante e layout mentre la pagina si ricompone
+    var t0=performance.now();cancelAnimationFrame(rid);
+    (function f(now){window.dispatchEvent(new Event('resize'));if(now-t0<fine)rid=requestAnimationFrame(f);})(t0);
+  }
+  function chiudi(subito){
+    if(fatto)return;fatto=true;
+    if(subito){hv.style.display='none';hero.classList.add('sopra');v.pause();segui(100);return;}
+    hv.style.height=hv.offsetHeight+'px';void hv.offsetHeight;
+    hero.classList.add('sopra');hv.classList.add('chiuso');
+    segui(1100);
+    setTimeout(function(){v.pause();hv.style.display='none';window.dispatchEvent(new Event('resize'));},1100);
+  }
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){v.removeAttribute('autoplay');chiudi(true);return;}
+  v.addEventListener('ended',function(){chiudi(false);});
+  v.addEventListener('timeupdate',function(){if(v.duration&&v.currentTime>=v.duration-0.35)chiudi(false);});
+  // se il video non parte (risparmio energetico, errore), non lasciare lo spazio vuoto
+  setTimeout(function(){if(v.paused&&v.currentTime<0.1)chiudi(false);},3500);
+  v.addEventListener('error',function(){chiudi(true);});
+  setTimeout(function(){chiudi(false);},13000);
+})();
 </script>
 </body>
 </html>
